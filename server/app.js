@@ -13,7 +13,15 @@ app.get('/api/', (req, res)=> {
 
 router.post('/api/createCM', (req, res)=>{
   console.log(req.body);
-  res.send("success");
+  let newCM = new models.CM(req.body);
+  newCM.save((err, data)=>{
+    if (err) {
+        res.send(err);
+    } else {
+        res.send('create CM successed');
+    }
+  });
+  // res.send("success");
 })
 
 router.get('/api/test1', (req, res)=>{
