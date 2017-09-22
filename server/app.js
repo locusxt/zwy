@@ -4,6 +4,7 @@ var app = express();
 var router = express.Router();
 var bodyParser = require("body-parser");  
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/api/', (req, res)=> {
