@@ -8,6 +8,8 @@ import index from '@/views/index';
 import framework from '@/views/framework';
 import sidemain from '@/views/sidemain';
 import cmview from '@/views/cmview';
+import testSide from '@/views/test-side.vue';
+import newRuntime from '@/views/newruntime.vue';
 
 Vue.use(Router)
 
@@ -21,7 +23,7 @@ export default new Router({
     component: (resolve) => require(['@/views/index.vue'], resolve)
 }, {
     path: '/frame',
-    name: 'simple test',
+    name: 'simple frame',
     components: {
         main: sidemain,
     },
@@ -47,6 +49,35 @@ export default new Router({
     components: {
         main: index,
     }
+}, {
+    path: '/test',
+    name: 'simple test',
+    components: {
+        main: sidemain,
+    },
+    children:[
+        {
+            path:'dataset',
+            components:{
+                main:newcm,
+                side:testSide,
+            }
+        },
+        {
+            path:'runtime',
+            components:{
+                main:cmview,
+                side:testSide,
+            }
+        },
+        {
+            path:'newruntime',
+            components:{
+                main:newRuntime,
+                side:testSide,
+            }
+        }
+    ]
 }
 ]
 })

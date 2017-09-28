@@ -6,7 +6,7 @@
             架构管理
         </Menu-item>
             </router-link>
-            <router-link to='/b'>
+            <router-link to='/test/dataset'>
         <Menu-item name="2">
             测试管理
         </Menu-item>
