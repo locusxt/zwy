@@ -22,10 +22,18 @@ const cmSchema = mongoose.Schema({
     configs: [{name: String, range:String}]
 });
 
+const runtimeSchema = mongoose.Schema({
+    name: String,
+    desc: String,
+    cpu: String,
+    nodenum: Number
+});
+
 /************** 定义模型Model **************/
 const Models = {
     Login : mongoose.model('Login',loginSchema),
-    CM : mongoose.model('CM', cmSchema)
+    CM : mongoose.model('CM', cmSchema),
+    Runtime : mongoose.model('Runtime', runtimeSchema)
 }
 
 module.exports = Models;

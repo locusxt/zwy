@@ -25,38 +25,26 @@ router.post('/api/createCM', (req, res)=>{
 })
 
 router.get('/api/test1', (req, res)=>{
-  let CM = models.CM;
-  CM.find().exec().then(data=>{
-    console.log(data);
-    res.send(data);
+  // let CM = models.CM;
+  // CM.find().exec().then(data=>{
+  //   console.log(data);
+  //   res.send(data);
+  // });
+  let newRuntime = new models.Runtime({
+      name: "天河",
+      desc: "china",
+      cpu: "i7",
+      nodenum: 100000
   });
-  // res.send("success");
-  // let newAccount = new models.Login({
-  //   account: "hihihi",
-  //   password: "ihihihi"
-  // });
-  // newAccount.save((err, data)=>{
-  //   if (err) {
-  //       res.send(err);
-  //   } else {
-  //       res.send('createAccount successed');
-  //   }
-  // });
+  newRuntime.save((err, data)=>{
+    if (err) {
+        res.send(err);
+    } else {
+        res.send('create Rt successed');
+    }
+  });
 });
 
-// router.get('/api/test1', (req, res)=>{
-//   let newAccount = new models.Login({
-//     account: "hihihi",
-//     password: "ihihihi"
-//   });
-//   newAccount.save((err, data)=>{
-//     if (err) {
-//         res.send(err);
-//     } else {
-//         res.send('createAccount successed');
-//     }
-//   });
-// });
 
 app.use(router);
 
