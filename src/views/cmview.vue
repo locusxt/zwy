@@ -84,26 +84,6 @@
                     }
                 ],
                 data: [
-                    {
-                        name: 'CM0',
-                        _id: 0,
-                        desc: 'xxx'
-                    },
-                    {
-                        name: 'CM1',
-                        _id: 1,
-                        desc: 'xxxx'
-                    },
-                    {
-                        name: 'CM2',
-                        _id: 2,
-                        desc: 'xxxx'
-                    },
-                    {
-                        name: 'CM3',
-                        _id: 3,
-                        desc: 'xxxxx'
-                    }
                 ],
                 modal1:false,
                 cur:{
@@ -133,7 +113,7 @@
             var self = this;
             this.$ajax({
                 method:'get',
-                url:'/api/test1'
+                url:'/api/getcm'
             }).then(function(response){
                 console.log(response);
                 console.log(self.data);

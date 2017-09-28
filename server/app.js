@@ -45,6 +45,21 @@ router.get('/api/test1', (req, res)=>{
   });
 });
 
+router.get('/api/getcm', (req, res)=>{
+  let CM = models.CM;
+  CM.find().exec().then(data=>{
+    console.log(data);
+    res.send(data);
+  });
+});
+
+router.get('/api/getruntime', (req, res)=>{
+  let Runtime = models.Runtime;
+  Runtime.find().exec().then(data=>{
+    console.log(data);
+    res.send(data);
+  });
+});
 
 app.use(router);
 

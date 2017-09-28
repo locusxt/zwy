@@ -1,7 +1,11 @@
 <template>
     <Row>
         <Col span="20" offset="2">
-        <searchbar></searchbar>
+        <h1 align="center">查看硬件环境</h1>
+        <Input v-model="searchValue">
+            <span slot="prepend">硬件环境</span>
+            <Button slot="append" icon="ios-search"></Button>
+        </Input>
         <br>
         <Table :columns="columns" :data="data"></Table>
         <br>
@@ -10,10 +14,11 @@
     </Row>
 </template>
 <script>
-    import searchbar from "../components/searchbar" 
+    // import searchbar from "../components/searchbar" 
     export default {
         data () {
             return {
+                searchValue:'',
                 columns: [
                     {
                         title: '型号',
@@ -43,9 +48,9 @@
                                     },
                                     on:{
                                         click:()=>{
-                                            // alert(this.data[params.index]);
-                                            this.cur = this.data[params.index];
-                                            this.modal1 = true;
+                                            alert(this.data[params.index]);
+                                            // this.cur = this.data[params.index];
+                                            // this.modal1 = true;
                                             // console.log(this.cur);
                                             // console.log(this.data.cur);
                                             // console.log(this.data.modal1);
@@ -68,42 +73,7 @@
                     }
                 ],
                 data: [
-                    {
-                        name: 'CM0',
-                        _id: 0,
-                        desc: 'xxx'
-                    },
-                    {
-                        name: 'CM1',
-                        _id: 1,
-                        desc: 'xxxx'
-                    },
-                    {
-                        name: 'CM2',
-                        _id: 2,
-                        desc: 'xxxx'
-                    },
-                    {
-                        name: 'CM3',
-                        _id: 3,
-                        desc: 'xxxxx'
-                    }
                 ],
-                modal1:false,
-                cur:{
-                    name: 'CM3',
-                    _id: 3,
-                    desc: 'xxxxx',
-                    configs: []
-                },
-                configColumns:[{
-                        title: '名称',
-                        key: 'name'
-                    },
-                    {
-                        title: '范围',
-                        key: 'range'
-                    }],
 
             }
         },
@@ -111,13 +81,12 @@
             
         },
         components:{
-            searchbar
         },
         created:function(){
             var self = this;
             this.$ajax({
                 method:'get',
-                url:'/api/test1'
+                url:'/api/getruntime'
             }).then(function(response){
                 console.log(response);
                 console.log(self.data);
@@ -126,11 +95,6 @@
             });
         },
         filters:{
-            formatDate(time){
-                // console.log(time);
-                return String(time).substring(0, 10);
-                //此处formatDate是一个函数，将其封装在common/js/date.js里面，便于全局使用
-            }
         }
     }
 </script>

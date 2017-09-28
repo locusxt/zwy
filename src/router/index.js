@@ -10,6 +10,7 @@ import sidemain from '@/views/sidemain';
 import cmview from '@/views/cmview';
 import testSide from '@/views/test-side.vue';
 import newRuntime from '@/views/newruntime.vue';
+import runtimeView from '@/views/runtimeview.vue';
 
 Vue.use(Router)
 
@@ -74,6 +75,13 @@ export default new Router({
             path:'newruntime',
             components:{
                 main:newRuntime,
+                side:testSide,
+            }
+        },
+        {
+            path:'runtimeview',
+            components:{
+                main:runtimeView,
                 side:testSide,
             }
         }
