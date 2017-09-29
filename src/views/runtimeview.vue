@@ -14,12 +14,22 @@
     </Row>
 </template>
 <script>
-    // import searchbar from "../components/searchbar" 
+    import runtimeExpand from "../components/runtimeexpand" 
     export default {
         data () {
             return {
                 searchValue:'',
-                columns: [
+                columns: [{
+                        type: 'expand',
+                        width: 50,
+                        render: (h, params) => {
+                            return h(runtimeExpand, {
+                                props: {
+                                    row: params.row
+                                }
+                            })
+                        }
+                    },
                     {
                         title: '型号',
                         key: 'name'
@@ -81,6 +91,7 @@
             
         },
         components:{
+            runtimeExpand
         },
         created:function(){
             var self = this;

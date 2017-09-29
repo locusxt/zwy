@@ -29,11 +29,18 @@ const runtimeSchema = mongoose.Schema({
     nodenum: Number
 });
 
+const datasetSchema = mongoose.Schema({
+    name: String,
+    desc: String,
+    remark: String
+});
+
 /************** 定义模型Model **************/
 const Models = {
     Login : mongoose.model('Login',loginSchema),
     CM : mongoose.model('CM', cmSchema),
-    Runtime : mongoose.model('Runtime', runtimeSchema)
+    Runtime : mongoose.model('Runtime', runtimeSchema),
+    Dataset : mongoose.model('Dataset', datasetSchema)
 }
 
 module.exports = Models;

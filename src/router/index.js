@@ -8,9 +8,12 @@ import index from '@/views/index';
 import framework from '@/views/framework';
 import sidemain from '@/views/sidemain';
 import cmview from '@/views/cmview';
-import testSide from '@/views/test-side.vue';
-import newRuntime from '@/views/newruntime.vue';
-import runtimeView from '@/views/runtimeview.vue';
+import testSide from '@/views/test-side';
+import newRuntime from '@/views/newruntime';
+import runtimeView from '@/views/runtimeview';
+import newDataset from '@/views/newdataset';
+import datasetView from '@/views/datasetview';
+import cmTest from '@/views/cmtest';
 
 Vue.use(Router)
 
@@ -58,20 +61,6 @@ export default new Router({
     },
     children:[
         {
-            path:'dataset',
-            components:{
-                main:newcm,
-                side:testSide,
-            }
-        },
-        {
-            path:'runtime',
-            components:{
-                main:cmview,
-                side:testSide,
-            }
-        },
-        {
             path:'newruntime',
             components:{
                 main:newRuntime,
@@ -82,6 +71,27 @@ export default new Router({
             path:'runtimeview',
             components:{
                 main:runtimeView,
+                side:testSide,
+            }
+        },
+        {
+            path:'newdataset',
+            components:{
+                main:newDataset,
+                side:testSide,
+            }
+        },
+        {
+            path:'datasetview',
+            components:{
+                main:datasetView,
+                side:testSide,
+            }
+        },
+        {
+            path:'cmtest',
+            components:{
+                main:cmTest,
                 side:testSide,
             }
         }

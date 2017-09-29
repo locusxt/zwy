@@ -11,6 +11,19 @@ app.get('/api/', (req, res)=> {
   res.send('Hello World!');
 });
 
+router.post('/api/createruntime', (req, res)=>{
+  console.log(req.body);
+  let newRuntime = new models.Runtime(req.body);
+  newRuntime.save((err, data)=>{
+    if (err) {
+        res.send(err);
+    } else {
+        res.send('create Runtime successed');
+    }
+  });
+  // res.send("success");
+});
+
 router.post('/api/createCM', (req, res)=>{
   console.log(req.body);
   let newCM = new models.CM(req.body);
@@ -21,15 +34,21 @@ router.post('/api/createCM', (req, res)=>{
         res.send('create CM successed');
     }
   });
-  // res.send("success");
+});
+
+router.post('/api/createdataset', (req, res)=>{
+  console.log(req.body);
+  let newDataset = new models.Dataset(req.body);
+  newDataset.save((err, data)=>{
+    if (err) {
+        res.send(err);
+    } else {
+        res.send('create dataset successed');
+    }
+  });
 })
 
 router.get('/api/test1', (req, res)=>{
-  // let CM = models.CM;
-  // CM.find().exec().then(data=>{
-  //   console.log(data);
-  //   res.send(data);
-  // });
   let newRuntime = new models.Runtime({
       name: "天河",
       desc: "china",
@@ -53,9 +72,25 @@ router.get('/api/getcm', (req, res)=>{
   });
 });
 
+router.get('/api/getdataset', (req, res)=>{
+  let Dataset = models.Dataset;
+  Dataset.find().exec().then(data=>{
+    console.log(data);
+    res.send(data);
+  });
+});
+
 router.get('/api/getruntime', (req, res)=>{
   let Runtime = models.Runtime;
   Runtime.find().exec().then(data=>{
+    console.log(data);
+    res.send(data);
+  });
+});
+
+router.get('/api/getdataset', (req, res)=>{
+  let Dataset = models.Dataset;
+  Dataset.find().exec().then(data=>{
     console.log(data);
     res.send(data);
   });

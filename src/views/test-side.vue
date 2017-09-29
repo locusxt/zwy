@@ -26,14 +26,20 @@ export default {
         navigate(event) {
             var url = "";
             switch (event) {
+                case "1-1":
+                    url = "/test/datasetview";
+                    break;
                 case "1-2":
-                    url = "/test/dataset";
+                    url = "/test/newdataset";
                     break;
                 case "1-3":
                     url = "/test/runtimeview";
                     break;
                 case "1-4":
                     url = "/test/newruntime";
+                    break;
+                case "2-1":
+                    url = "/test/cmtest";
                     break;
                 default:
                     url = "";
