@@ -85,7 +85,7 @@
             }
         },
         components:{
-            searchbar, newconfig
+            newconfig
         }
     }
 </script>
