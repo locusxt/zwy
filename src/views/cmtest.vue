@@ -16,12 +16,14 @@
                 <br>
                 <strong>可配置项：</strong>
                 <br>
+                <configEditor></configEditor> 
             </div>
         </i-col>
     </Row>
 </template>
 <script>
     import cmSelector from "../components/cmselector"
+    import configEditor from "../components/configeditor"
     export default {
         data () {
             return {
@@ -53,7 +55,7 @@
             }
         },
         components:{
-            cmSelector
+            cmSelector, configEditor 
         }
     }
 </script>
