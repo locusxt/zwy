@@ -6,11 +6,16 @@ import router from './router'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import axios from 'axios'
+// import $ from 'jquery'
+
 
 Vue.prototype.$ajax = axios
 
 Vue.config.productionTip = false
 Vue.use(iView);
+
+window.$ = require('jquery');
+window.joint = require('jointjs');
 
 /* eslint-disable no-new */
 new Vue({

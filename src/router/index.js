@@ -14,6 +14,9 @@ import runtimeView from '@/views/runtimeview';
 import newDataset from '@/views/newdataset';
 import datasetView from '@/views/datasetview';
 import cmTest from '@/views/cmtest';
+import appSide from '@/views/app-side';
+import newApp from '@/views/newapp';
+
 
 Vue.use(Router)
 
@@ -93,6 +96,22 @@ export default new Router({
             components:{
                 main:cmTest,
                 side:testSide,
+            }
+        }
+    ]
+},
+{
+    path: '/app',
+    name: 'simple app',
+    components: {
+        main: sidemain,
+    },
+    children:[
+        {
+            path:'newapp',
+            components:{
+                main:newApp,
+                side:appSide,
             }
         }
     ]

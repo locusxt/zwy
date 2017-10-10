@@ -2,14 +2,19 @@
     <div class="layout">
     <Menu mode="horizontal" :theme="theme1" active-name="1">
             <router-link to='/frame/newcm'>
-        <Menu-item name="1">
-            架构管理
-        </Menu-item>
+                <Menu-item name="1">
+                    架构管理
+                </Menu-item>
             </router-link>
             <router-link to='/test/newdataset'>
-        <Menu-item name="2">
-            测试管理
-        </Menu-item>
+                <Menu-item name="2">
+                    测试管理
+                </Menu-item>
+            </router-link>
+            <router-link to='/app/newapp'>
+                <Menu-item name="3">
+                    应用软件
+                </Menu-item>
             </router-link>
        <!--  <Menu-item name="2">
             <Icon type="ios-people"></Icon>
