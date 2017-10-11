@@ -13,6 +13,12 @@
         <Form-item label="描述">
             <Input v-model="formItem.desc" type="textarea" :autosize="{minRows: 2}" placeholder="请输入..."></Input>
         </Form-item>
+        <Form-item label="测试数据集">
+            <datasetAdder @transferDataset="getDatasets"></datasetAdder>
+            <div>
+
+            </div>   
+        </Form-item>
         <Form-item>
             <Button type="primary" v-on:click="createDataset">提交</Button>
             <Button type="ghost" style="margin-left: 8px">取消</Button>
@@ -22,12 +28,14 @@
     </Row>
 </template>
 <script>
+    import datasetAdder from "../components/datasetadder";
     export default {
         data () {
             return {
                 formItem: {
                     name: '',
-                    desc: ''
+                    desc: '',
+                    datasets:[]
                 }
             }
         },
@@ -51,12 +59,13 @@
                     console.log(response);
                 });
             },
-            getConfigs(msg){
-                this.formItem.configs = msg;
+            getDatasets(msg){
+                console.log(msg);
+                this.formItem.datasets = msg;
             }
         },
         components:{
-
+            datasetAdder
         }
     }
 </script>

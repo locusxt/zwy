@@ -75,6 +75,7 @@
             });
 
             graph.addCells([rect, rect2, link]);
+            console.log(graph.toJSON());
         }
     }
 </script>
