@@ -28,6 +28,7 @@
     </div>
 </template>
 <script>
+import datasetExpand from "./datasetexpand";
 export default {
     data() {
         return {
@@ -38,7 +39,17 @@ export default {
                 gen:''
             },
             datasetModal:false,
-            columns: [
+            columns: [{
+                        type: 'expand',
+                        width: 50,
+                        render: (h, params) => {
+                            return h(datasetExpand, {
+                                props: {
+                                    row: params.row
+                                }
+                            })
+                        }
+                    },
                     {
                         title: '名称',
                         key: 'name'
@@ -74,7 +85,7 @@ export default {
         }
     },
     components:{
-        
+        datasetExpand
     },
     methods: {
             ok (){
