@@ -30,6 +30,9 @@ export default {
                 case "1-1":
                     url = "/frame/cmview";
                     break;
+                case "2-2":
+                    url = "/frame/newam";
+                    break;
                 default:
                     url = "";
             }

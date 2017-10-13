@@ -32,7 +32,7 @@ const runtimeSchema = mongoose.Schema({
 const datasetSchema = mongoose.Schema({
     name: String,
     desc: String,
-    remark: String
+    datasets: [{name:String, version:String, desc:String, gen:String}]
 });
 
 /************** 定义模型Model **************/
