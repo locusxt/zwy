@@ -48,25 +48,25 @@
                         align: 'center',
                         render:(h, params)=>{
                             return h('div', [
-                                h('Button', {
-                                    props:{
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style:{
-                                        marginRight: '5px'
-                                    },
-                                    on:{
-                                        click:()=>{
-                                            alert(this.data[params.index]);
-                                            // this.cur = this.data[params.index];
-                                            // this.modal1 = true;
-                                            // console.log(this.cur);
-                                            // console.log(this.data.cur);
-                                            // console.log(this.data.modal1);
-                                        }
-                                    }
-                                }, '查看'),
+                                // h('Button', {
+                                //     props:{
+                                //         type: 'primary',
+                                //         size: 'small'
+                                //     },
+                                //     style:{
+                                //         marginRight: '5px'
+                                //     },
+                                //     on:{
+                                //         click:()=>{
+                                //             alert(this.data[params.index]);
+                                //             // this.cur = this.data[params.index];
+                                //             // this.modal1 = true;
+                                //             // console.log(this.cur);
+                                //             // console.log(this.data.cur);
+                                //             // console.log(this.data.modal1);
+                                //         }
+                                //     }
+                                // }, '查看'),
                                 h('Button', {
                                     props:{
                                         type: 'error',
