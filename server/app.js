@@ -84,6 +84,14 @@ router.get('/api/getcm', (req, res)=>{
   });
 });
 
+router.get('/api/getam', (req, res)=>{
+  let AM = models.AM;
+  AM.find().exec().then(data=>{
+    console.log(data);
+    res.send(data);
+  });
+});
+
 router.get('/api/getdataset', (req, res)=>{
   let Dataset = models.Dataset;
   Dataset.find().exec().then(data=>{

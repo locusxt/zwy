@@ -33,6 +33,9 @@ export default {
                 case "2-2":
                     url = "/frame/newam";
                     break;
+                case "2-1":
+                    url = "/frame/amview";
+                    break;
                 default:
                     url = "";
             }

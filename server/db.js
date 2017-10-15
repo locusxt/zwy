@@ -29,7 +29,7 @@ const amSchema = mongoose.Schema({
     desc: String,
     date: Date,
     configs: [{name: String, range:String}],
-    cms:[{id:String, weight:Number}],
+    cms:[{id:String, name:String, weight:Number}],
     subconfigs:[{name:String, range:String, value:String}]
 });
 

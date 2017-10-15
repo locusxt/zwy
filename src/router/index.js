@@ -17,7 +17,7 @@ import cmTest from '@/views/cmtest';
 import appSide from '@/views/app-side';
 import newApp from '@/views/newapp';
 import newam from '@/views/newam';
-
+import amview from '@/views/amview';
 
 Vue.use(Router)
 
@@ -54,6 +54,13 @@ export default new Router({
             path:'newam',
             components:{
                 main:newam,
+                side:frameSide,
+            }
+        },
+        {
+            path:'amview',
+            components:{
+                main:amview,
                 side:frameSide,
             }
         }

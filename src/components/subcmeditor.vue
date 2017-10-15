@@ -116,7 +116,8 @@ export default {
             for (var i in this.data){
                 res.cms.push({
                     id:this.data[i]._id,
-                    weight:this.data[i].weight
+                    weight:this.data[i].weight,
+                    name:this.data[i].name
                 })
             }
             res.subconfigs = this.subconfigs;
