@@ -38,7 +38,7 @@
         </Form-item>
         <Form-item label="关联的计算模式">
             <!-- <newconfig @transferConfig="getConfigs"></newconfig> -->
-            <subCMEditor></subCMEditor>
+            <subCMEditor @transferSubCMs="getSubCMs"></subCMEditor>
         </Form-item>
         <Form-item>
             <Button type="primary" v-on:click="createAM">提交</Button>
@@ -87,6 +87,11 @@
             },
             getConfigs(msg){
                 this.formItem.configs = msg;
+            },
+            getSubCMs(msg){
+                this.formItem.cms = msg.cms;
+                this.formItem.subconfigs = msg.subconfigs;
+                console.log(this.formItem);
             }
         },
         components:{

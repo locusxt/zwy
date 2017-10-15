@@ -59,6 +59,7 @@ export default {
                                         self.$emit('input', event.target.value);
                                         self.data[params.index].weight = event.target.value;
                                         console.log(self.data);
+                                        self.emit();
                                     
                                     }
                                 }
@@ -80,6 +81,7 @@ export default {
                                 on: {
                                     click: () => {
                                         this.data.splice(params.index, 1);
+                                        this.updateSubConfigs();
                                         this.emit();
                                     }
                                 }
@@ -107,7 +109,20 @@ export default {
         emit() {
             //发送添加的cm id，和各cm占的权重，和cm的配置情况 
             //TODO
-            this.$emit('transferConfig', this.data);
+            // this.$emit('transferConfig', this.data);
+            console.log("transfer cms");
+            var res = {};
+            res.cms = [];
+            for (var i in this.data){
+                res.cms.push({
+                    id:this.data[i]._id,
+                    weight:this.data[i].weight
+                })
+            }
+            res.subconfigs = this.subconfigs;
+            
+            this.$emit('transferSubCMs', res);
+            console.log(res);
         },
         getCM(msg) {
             this.newcm = msg;
@@ -115,7 +130,8 @@ export default {
             // console.log(msg);
             this.data.push(this.newcm);
             this.updateSubConfigs();
-            console.log(this.subconfigs);
+            // console.log(this.subconfigs);
+            this.emit();
         },
         subconfigs2arr(cfgs){
             var res = [];

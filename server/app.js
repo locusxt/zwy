@@ -36,6 +36,18 @@ router.post('/api/createCM', (req, res)=>{
   });
 });
 
+router.post('/api/createAM', (req, res)=>{
+  console.log(req.body);
+  let newAM = new models.AM(req.body);
+  newAM.save((err, data)=>{
+    if (err) {
+        res.send(err);
+    } else {
+        res.send('create AM successed');
+    }
+  });
+});
+
 router.post('/api/createdataset', (req, res)=>{
   console.log(req.body);
   let newDataset = new models.Dataset(req.body);

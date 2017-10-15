@@ -22,6 +22,17 @@ const cmSchema = mongoose.Schema({
     configs: [{name: String, range:String}]
 });
 
+const amSchema = mongoose.Schema({
+    name: String,
+    version: String,
+    leader: String,
+    desc: String,
+    date: Date,
+    configs: [{name: String, range:String}],
+    cms:[{id:String, weight:Number}],
+    subconfigs:[{name:String, range:String, value:String}]
+});
+
 const runtimeSchema = mongoose.Schema({
     name: String,
     desc: String,
@@ -39,6 +50,7 @@ const datasetSchema = mongoose.Schema({
 const Models = {
     Login : mongoose.model('Login',loginSchema),
     CM : mongoose.model('CM', cmSchema),
+    AM : mongoose.model('AM', amSchema),
     Runtime : mongoose.model('Runtime', runtimeSchema),
     Dataset : mongoose.model('Dataset', datasetSchema)
 }
