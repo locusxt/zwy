@@ -4,17 +4,23 @@
 
 <template>
     <Row>
-        <i-col span='18' offset='2'>
+        <Col span='18' offset='2'>
             <div>
                 <h1 align="center">新建应用软件流程</h1>
                 <br />
                 <div id="testdiv">
-                    <div id="stencil"></div>
-                    <br>
-                    <div id="myholder"></div>
+                    <Row>
+                        <Col span='3'>
+                            <div id="stencil" style="border-style: solid"></div>
+                        </Col>
+                        <Col span='5'>
+                            <div id="myholder" style="border-style: solid"></div>
+                        </Col>
+                        
+                    </Row>
                 </div>
             </div>
-        </i-col>
+        </Col>
     </Row>
 </template>
 <script>
@@ -64,41 +70,41 @@ export default {
         var stencilGraph = new joint.dia.Graph,
             stencilPaper = new joint.dia.Paper({
                 el: $('#stencil'),
-                height: 200,
+                height: 720,
                 model: stencilGraph,
                 interactive: false
             });
 
-        var r1 = new joint.shapes.basic.Rect({
-            position: {
-                x: 10,
-                y: 10
-            },
-            size: {
-                width: 100,
-                height: 40
-            },
-            attrs: {
-                text: {
-                    text: 'Rect1'
-                }
-            }
-        });
-        var r2 = new joint.shapes.basic.Rect({
-            position: {
-                x: 120,
-                y: 10
-            },
-            size: {
-                width: 100,
-                height: 40
-            },
-            attrs: {
-                text: {
-                    text: 'Rect2'
-                }
-            }
-        });
+        // var r1 = new joint.shapes.basic.Rect({
+        //     position: {
+        //         x: 10,
+        //         y: 10
+        //     },
+        //     size: {
+        //         width: 100,
+        //         height: 40
+        //     },
+        //     attrs: {
+        //         text: {
+        //             text: 'Rect1'
+        //         }
+        //     }
+        // });
+        // var r2 = new joint.shapes.basic.Rect({
+        //     position: {
+        //         x: 120,
+        //         y: 10
+        //     },
+        //     size: {
+        //         width: 100,
+        //         height: 40
+        //     },
+        //     attrs: {
+        //         text: {
+        //             text: 'Rect2'
+        //         }
+        //     }
+        // });
 
         stencilPaper.on('cell:pointerdown', function(cellView, e, x, y) {
             $('#testdiv').append('<div id="flyPaper" style="position:fixed;z-index:100;opacity:.7;pointer-event:none;"></div>');
@@ -147,8 +153,8 @@ export default {
 
         let paper = new joint.dia.Paper({
             el: $('#myholder'),
-            width: 720,
-            height: 1200,
+            width:720,
+            height: 1000,
             model: graph,
             gridSize: 1,
             highlighting: {
@@ -220,23 +226,23 @@ export default {
         });
 
 
-        let rect = new joint.shapes.basic.Rect({
-            position: { x: 100, y: 30 },
-            size: { width: 100, height: 30 },
-            attrs: { rect: { fill: 'blue' }, text: { text: 'my box', fill: 'white' } }
-        });
+        // let rect = new joint.shapes.basic.Rect({
+        //     position: { x: 100, y: 30 },
+        //     size: { width: 100, height: 30 },
+        //     attrs: { rect: { fill: 'blue' }, text: { text: 'my box', fill: 'white' } }
+        // });
 
-        let rect2 = rect.clone();
-        rect2.translate(300);
+        // let rect2 = rect.clone();
+        // rect2.translate(300);
 
-        let link = new joint.dia.Link({
-            source: { id: rect.id },
-            target: { id: rect2.id }
-        });
+        // let link = new joint.dia.Link({
+        //     source: { id: rect.id },
+        //     target: { id: rect2.id }
+        // });
 
         var m1 = new joint.shapes.devs.Model({
-            position: { x: 50, y: 50 },
-            size: { width: 90, height: 90 },
+            position: { x: 15, y: 25 },
+            size: { width: 70, height: 56 },
             inPorts: ['in'],
             outPorts: ['out'],
             ports: {
@@ -261,7 +267,7 @@ export default {
                 }
             },
             attrs: {
-                '.label': { text: 'Model', 'ref-x': .5, 'ref-y': .2 },
+                '.label': { text: '算法模式', 'ref-x': .5, 'ref-y': .4 },
                 rect: { fill: '#2ECC71' }
             }
         });
@@ -271,12 +277,12 @@ export default {
         m2.translate(300, 0);
         graph.addCell(m2);
 
-        graph.addCells([rect, rect2, link]);
+        // graph.addCells([rect, rect2, link]);
 
         // stencilGraph.addCells([m1, m2, rect, rect2, link]);
         var m3 = m1.clone();
-        m3.translate(230, 10)
-        stencilGraph.addCells([r1, r2, m3]);
+        m3.translate(0, 0)
+        stencilGraph.addCells([ m3]);
         console.log(graph.toJSON());
     }
 }
