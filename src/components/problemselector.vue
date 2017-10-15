@@ -6,9 +6,9 @@
 
 <template>
     <div class="inline-div">
-        <Button type="primary" @click="selectModal = true">选择计算模式</Button>
+        <Button type="primary" @click="problemModal = true">选择测试问题</Button>
         <Modal 
-            v-model="selectModal" title="选择计算模式" width="700">
+            v-model="problemModal" title="选择测试问题" width="700">
             <searchbar></searchbar>
             <br>
             <Table :columns="columns" :data="data"></Table>
@@ -19,25 +19,15 @@
 </template>
 <script>
 import searchbar from "./searchbar" 
-import cmExpand from "./cmexpand"
+// import cmExpand from "./cmexpand"
 export default {
     data() {
         return {
             value: '',
-            selectModal:false,
+            problemModal:false,
             cur:{},
-            columns: [{
-                        type: 'expand',
-                        width: 50,
-                        render: (h, params) => {
-                            return h(cmExpand, {
-                                props: {
-                                    row: params.row
-                                }
-                            })
-                        }
-                    },
-                    {
+            columns: [
+                {
                         title: '名称',
                         key: 'name'
                     },
@@ -46,8 +36,8 @@ export default {
                         key: '_id'
                     },
                     {
-                        title: '版本',
-                        key: 'version'
+                        title: '描述',
+                        key: 'desc'
                     },
                     {
                         title: '操作',
@@ -68,7 +58,7 @@ export default {
                                             // alert(this.data[params.index]);
                                             this.cur = this.data[params.index];
                                             this.emit();
-                                            this.selectModal = false;
+                                            this.problemModal = false;
                                         }
                                     }
                                 }, '选择')
@@ -81,13 +71,13 @@ export default {
         }
     },
     components:{
-        cmExpand, searchbar
+        searchbar
     },
     created:function(){
         var self = this;
         this.$ajax({
             method:'get',
-            url:'/api/getcm'
+            url:'/api/getdataset'
         }).then(function(response){
             console.log(response);
             console.log(self.data);
@@ -100,8 +90,9 @@ export default {
                 
             },
             emit(){
-                console.log("emit cm");
-                this.$emit('transferCM', this.cur);
+                console.log("emit problem");
+                this.$emit('transferProblem', this.cur);
+                console.log(this.cur);
             }
         }
 }

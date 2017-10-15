@@ -29,8 +29,20 @@
                 <p>节点个数：{{runtime.nodenum}}</p>
             </div>
             <br>
-            <h2>测试问题：</h2>
-            <br><br>
+            <h2>测试问题：&nbsp;&nbsp;&nbsp;<problemSelector @transferProblem="getProblem"></problemSelector> </h2>
+            <div>
+                <p>名称：{{problem.name}}</p>
+                <p>描述：{{problem.desc}}</p>
+            </div>
+            <br>
+            <h2>测试数据集：&nbsp;&nbsp;&nbsp; <datasetSelector :datasets=problem.datasets @transferDataset="getDataset"></datasetSelector>    </h2>
+            <div>
+                <p>名称：{{dataset.name}}</p>
+                <p>版本：{{dataset.version}}</p>
+                <p>描述：{{dataset.desc}}</p>
+                <p>生成方法：{{dataset.gen}}</p>
+            </div>
+            <br>
             <div>
                 <Button type="primary">确认</Button>
             </div>
@@ -50,6 +62,8 @@
     import cmSelector from "../components/cmselector"
     import configEditor from "../components/configeditor"
     import runtimeSelector from "../components/runtimeselector"
+    import problemSelector from "../components/problemselector"
+    import datasetSelector from "../components/datasetselector"
     export default {
         data () {
             return {
@@ -64,6 +78,17 @@
                     name:'未选择',
                     cpu:'',
                     nodenum:''
+                },
+                problem:{
+                    name:'未选择',
+                    desc:'',
+                    datasets:[]
+                },
+                dataset:{
+                    name:'未选择',
+                    version:'',
+                    desc:'',
+                    gen:''
                 },
                 configs:[],
                 columns: [
@@ -112,10 +137,18 @@
             getConfigs(msg){
                 this.configs = msg;
                 console.log(msg);
+            },
+            getProblem(msg){
+                this.problem = msg;
+                console.log(msg);
+            },
+            getDataset(msg){
+                this.dataset = msg;
+                console.log(msg);
             }
         },
         components:{
-            cmSelector, configEditor, runtimeSelector 
+            cmSelector, configEditor, runtimeSelector, problemSelector, datasetSelector 
         }
     }
 </script>
