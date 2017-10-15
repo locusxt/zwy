@@ -46,13 +46,24 @@ const datasetSchema = mongoose.Schema({
     datasets: [{name:String, version:String, desc:String, gen:String}]
 });
 
+const cmTestSchema = mongoose.Schema({
+    cm:{name:String, id:String},
+    runtime:{name:String, id:String},
+    problem:{name:String, id:String},
+    dataset:{name:String, id:String},
+    configs:{},
+    tests:[{time:String, leader:String, result:Number, remark:String}]
+});
+
 /************** 定义模型Model **************/
 const Models = {
     Login : mongoose.model('Login',loginSchema),
     CM : mongoose.model('CM', cmSchema),
     AM : mongoose.model('AM', amSchema),
     Runtime : mongoose.model('Runtime', runtimeSchema),
-    Dataset : mongoose.model('Dataset', datasetSchema)
+    Dataset : mongoose.model('Dataset', datasetSchema),
+    CMTest: mongoose.model('CMTest', cmTestSchema),
+    
 }
 
 module.exports = Models;

@@ -60,6 +60,19 @@ router.post('/api/createdataset', (req, res)=>{
   });
 })
 
+router.post('/api/createcmtest', (req, res)=>{
+  console.log(req.body);
+  let newCMTest = new models.CMTest(req.body);
+  newCMTest.save((err, data)=>{
+    if (err) {
+        res.send(err);
+    } else {
+        res.send('create CMTest successed');
+    }
+  });
+});
+
+
 router.get('/api/test1', (req, res)=>{
   let newRuntime = new models.Runtime({
       name: "天河",
@@ -111,6 +124,14 @@ router.get('/api/getruntime', (req, res)=>{
 router.get('/api/getdataset', (req, res)=>{
   let Dataset = models.Dataset;
   Dataset.find().exec().then(data=>{
+    console.log(data);
+    res.send(data);
+  });
+});
+
+router.get('/api/getcmtest', (req, res)=>{
+  let CMTest = models.CMTest;
+  CMTest.find().exec().then(data=>{
     console.log(data);
     res.send(data);
   });
