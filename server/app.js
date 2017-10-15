@@ -58,7 +58,31 @@ router.post('/api/createdataset', (req, res)=>{
         res.send('create dataset successed');
     }
   });
-})
+});
+
+router.post('/api/addcmtest', (req, res)=>{
+  console.log(req.body);
+  let CMTest = models.CMTest;
+  CMTest.update(req.body.info, {$addToSet:{"tests":req.body.newtest}}, {upsert:true}, (err, docs)=>{
+    if(err) {
+      console.log(err);
+      res.send(err);
+    }
+    else 
+      res.send('create CMTest successed');
+  });
+});
+
+router.post('/api/getcmtest', (req, res)=>{
+  console.log(req.body);
+  let CMTest = models.CMTest;
+  CMTest.findOne(req.body).exec().then(data=>{
+    // console.log(data);
+    console.log('cmtest:');
+    console.log(data);
+    res.send(data.tests);
+  });
+});
 
 router.post('/api/createcmtest', (req, res)=>{
   console.log(req.body);

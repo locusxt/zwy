@@ -71,6 +71,8 @@
                 <Input v-model="newtest.leader"></Input>
                 <p><strong>结果(秒)：</strong></p>
                 <Input v-model="newtest.result"></Input>
+                <p><strong>备注：</strong></p>
+                <Input v-model="newtest.remark"></Input>
             </Modal>
         </i-col>
     </Row>
@@ -87,7 +89,9 @@ export default {
             newtestModal:false,
             newtest:{
                 leader:'',
-                result:''
+                result:'',
+                time:'',
+                remark:''
             },
             cur: {
                 name: '未选择',
@@ -196,12 +200,38 @@ export default {
         },
         searchTest() {
             var info = this.assempleInfo();
-            console.log(info);
+            // console.log(info);
+            var self = this;
+            this.$ajax({
+                    method:'post',
+                    url:'/api/getcmtest',
+                    data:info
+                }).then(function(response){
+                    console.log("this is response");
+                    console.log(response);
+                    self.tests = response.data;
+                });
         },
         addTest(){
-            console.log(this.newtest);
+            // console.log(this.newtest);
+            // console.log(this.formItem);
+            console.log("in test");
+            var myinfo = this.assempleInfo();
+            this.newtest.time = Date();
+            var self = this;
 
-            this.newtest.result = '';
+                this.$ajax({
+                    method:'post',
+                    url:'/api/addcmtest',
+                    data:{info:myinfo, newtest:this.newtest}
+                }).then(function(response){
+                    console.log("this is response");
+                    console.log(response);
+                    self.newtest.result = '';
+                    self.newtest.remark = '';
+                });
+
+
             // var info = this.assempleInfo();
             // console.log(info);
         }
