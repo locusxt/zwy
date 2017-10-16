@@ -32,7 +32,13 @@
                         <div v-if="selected!=undefined">
                             <p><strong>编号：</strong>{{selected.id}}</p>
                             <p><strong>类型：</strong>{{selected.type}}</p>
-
+                            <div v-if="selected.type=='AM' && configs[selected.id]!=undefined">
+                                <p><strong>预计运行次数：</strong></p>
+                                <Input v-model="configs[selected.id].loopnum"></Input>
+                                <p><strong>算法模式：</strong></p>
+                                <p>名称：{{configs[selected.id].name}}</p>
+                                <p>编号：{{configs[selected.id].id}}</p>
+                            </div>
                         </div>
                     </Card>    
 
@@ -47,6 +53,9 @@
 export default {
     data() {
         return {
+            configs:{
+
+            },
             selected:{
                 model:{
                     id:''
@@ -236,20 +245,36 @@ export default {
         var highlighted;
         // var self = this;
         this.paper.on('cell:pointerclick', function(cellView) {
-            if (highlighted != undefined)
+            if (highlighted != undefined){
+                self.selected = undefined;
                 highlighted.unhighlight();
+            }
             cellView.highlight();
             highlighted = cellView;
-            // self.selected = highlighted;
-            // console.log('select');
-            // console.log(self.selected);
             // console.log(self.selected.model.attributes.attrs[".label"].text);
             // self.selected.model.attributes.attrs[".label"].text = "123";
+            //以下是选中的时候会发生的事情
             self.selected = {};//selected的内容不与highlighted绑定在一起
-            self.selected.id = highlighted.model.id;
+            
+            var cellId = highlighted.model.id;
+            self.selected.id = cellId;
             var cell = self.graph.getCell(self.selected.id);
             var cellType = cell.attributes.type;
             self.selected.type = cellType;
+            if (cellType == "AM" && self.configs[cellId] == undefined){
+                // self.configs[cellId] = {
+                //     loopnum:0,
+                //     name:'',
+                //     id:'',
+                //     subconfigs:[]
+                // }
+                self.$set(self.configs, cellId, {
+                    loopnum:1,
+                    name:'',
+                    id:'',
+                    subconfigs:[]
+                });
+            }
             // console.log(self.selected);
             // console.log(cellType);
             // console.log(cell.isElement());
@@ -301,15 +326,6 @@ export default {
             }
         });
 
-
-        // graph.addCell(m1);
-
-        // var m2 = m1.clone();
-        // m2.translate(300, 0);
-        // graph.addCell(m2);
-
-        // var m3 = m1.clone();
-        // m3.translate(0, 0)
         this.stencilGraph.addCells([am]);
         console.log(self.graph.toJSON());
 
