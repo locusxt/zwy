@@ -1,25 +1,35 @@
 <style scoped>
 @import '/static/css/joint.min.css';
+
+
+/* #stencil,
+#myholder {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+} */
 </style>
 
 <template>
     <Row>
         <Col span='18' offset='2'>
-            <div>
-                <h1 align="center">新建应用软件流程</h1>
-                <br />
-                <div id="testdiv">
-                    <Row>
-                        <Col span='3'>
-                            <div id="stencil" style="border-style: solid"></div>
-                        </Col>
-                        <Col span='5'>
-                            <div id="myholder" style="border-style: solid"></div>
-                        </Col>
-                        
-                    </Row>
-                </div>
+        <div>
+            <h1 align="center">新建应用软件流程</h1>
+            <br>
+            <br>
+            <div id="testdiv">
+                <Row>
+                    <Col span='4'>
+                    <div id="stencil" style="border:1px solid"></div>
+                    </Col>
+                    <Col span='16'>
+                    <div id="myholder" style="border:1px solid"></div>
+                    </Col>
+
+                </Row>
             </div>
+        </div>
         </Col>
     </Row>
 </template>
@@ -70,9 +80,14 @@ export default {
         var stencilGraph = new joint.dia.Graph,
             stencilPaper = new joint.dia.Paper({
                 el: $('#stencil'),
+                width: $('#stencil').width(),
                 height: 720,
                 model: stencilGraph,
-                interactive: false
+                interactive: false,
+
+                background: {
+                    color: '#FAEBD7'
+                }
             });
 
         // var r1 = new joint.shapes.basic.Rect({
@@ -153,10 +168,13 @@ export default {
 
         let paper = new joint.dia.Paper({
             el: $('#myholder'),
-            width:720,
+            width: $('#myholder').width(),
             height: 1000,
             model: graph,
-            gridSize: 1,
+            gridSize: 10,
+            background: {
+                color: '#F0F8FF'
+            },
             highlighting: {
                 'default': {
                     name: 'stroke',
@@ -225,24 +243,9 @@ export default {
             highlighted = undefined;
         });
 
-
-        // let rect = new joint.shapes.basic.Rect({
-        //     position: { x: 100, y: 30 },
-        //     size: { width: 100, height: 30 },
-        //     attrs: { rect: { fill: 'blue' }, text: { text: 'my box', fill: 'white' } }
-        // });
-
-        // let rect2 = rect.clone();
-        // rect2.translate(300);
-
-        // let link = new joint.dia.Link({
-        //     source: { id: rect.id },
-        //     target: { id: rect2.id }
-        // });
-
-        var m1 = new joint.shapes.devs.Model({
-            position: { x: 15, y: 25 },
-            size: { width: 70, height: 56 },
+        var am = new joint.shapes.devs.Model({
+            position: { x: 25, y: 25 },
+            size: { width: 70, height: 60 },
             inPorts: ['in'],
             outPorts: ['out'],
             ports: {
@@ -271,19 +274,160 @@ export default {
                 rect: { fill: '#2ECC71' }
             }
         });
-        graph.addCell(m1);
 
-        var m2 = m1.clone();
-        m2.translate(300, 0);
-        graph.addCell(m2);
 
-        // graph.addCells([rect, rect2, link]);
+        // graph.addCell(m1);
 
-        // stencilGraph.addCells([m1, m2, rect, rect2, link]);
-        var m3 = m1.clone();
-        m3.translate(0, 0)
-        stencilGraph.addCells([ m3]);
+        // var m2 = m1.clone();
+        // m2.translate(300, 0);
+        // graph.addCell(m2);
+
+        // var m3 = m1.clone();
+        // m3.translate(0, 0)
+        stencilGraph.addCells([am]);
         console.log(graph.toJSON());
+
+
+        //resize paper
+        window.onresize = function(event) {
+            console.log('...window resize');
+            paper.setDimensions($('#myholder').width());
+            // paper.scaleContentToFit({minScaleX: 0, minScaleY: 0, maxScaleX: 1 , maxScaleY: 1});
+            stencilPaper.setDimensions($('#stencil').width());
+            // stencilPaper.scaleContentToFit({minScaleX: 0, minScaleY: 0, maxScaleX: 1 , maxScaleY: 1});
+        };
+
+        joint.shapes.devs.CircleModel = joint.shapes.devs.Model.extend({
+            markup: '<g class="rotatable"><g class="scalable"><circle class="body"/></g><text class="label"/><g class="inPorts"/><g class="outPorts"/></g>',
+            // portMarkup: '<g class="port port' + ['<','%','='].join('') + ' id =>"><rect class="port-body"/><text class="port-label"/></g>',
+            defaults: joint.util.deepSupplement({
+                type: 'devs.CircleModel',
+                attrs: {
+                    '.body': { r: 50, cx: 50, cy: 50, stroke: 'blue', fill: 'lightblue' },
+                    '.label': { text: 'Circle Model', 'ref-y': 0.5, 'y-alignment': 'middle' },
+                    // '.port-body': { width: 10, height: 10, x: -5, stroke: 'gray', fill: 'lightgray', magnet: 'active' }
+                }
+            }, joint.shapes.devs.Model.prototype.defaults)
+        });
+
+        joint.shapes.devs.CircleModelView = joint.shapes.devs.ModelView;
+
+        var startModel = new joint.shapes.devs.CircleModel({
+            position: {
+                x: 25,
+                y: 100
+            },
+            size: {
+                width: 70,
+                height: 70
+            },
+            // inPorts: ['in'],
+            outPorts: ['out'],
+            ports: {
+                groups: {
+                    'in': {
+                        attrs: {
+                            '.port-body': {
+                                fill: '#16A085',
+                                magnet: 'passive',
+                            }
+                        },
+                        position: 'top'
+                    },
+                    'out': {
+                        attrs: {
+                            '.port-body': {
+                                fill: '#E74C3C'
+                            }
+                        },
+                        position: 'bottom'
+                    }
+                }
+            },
+            attrs: {
+                // '.body': { r: 50, cx: 50, cy:50, stroke: 'blue', fill: 'lightblue' },
+                '.label': { text: '开始', 'ref-y': 0.5, 'y-alignment': 'middle' }
+                // '.port-body': { width: 10, height: 10, x: -5, stroke: 'gray', fill: 'lightgray', magnet: 'active' }
+            }
+        });
+
+
+        stencilGraph.addCells([startModel]);
+
+        var endModel = new joint.shapes.devs.CircleModel({
+            position: {
+                x: 25,
+                y: 200
+            },
+            size: {
+                width: 70,
+                height: 70
+            },
+            inPorts: ['in'],
+            // outPorts: ['out'],
+            ports: {
+                groups: {
+                    'in': {
+                        attrs: {
+                            '.port-body': {
+                                fill: '#16A085',
+                                magnet: 'passive',
+                            }
+                        },
+                        position: 'top'
+                    },
+                    'out': {
+                        attrs: {
+                            '.port-body': {
+                                fill: '#E74C3C'
+                            }
+                        },
+                        position: 'bottom'
+                    }
+                }
+            },
+            attrs: {
+                // '.body': { r: 50, cx: 50, cy:50, stroke: 'blue', fill: 'lightblue' },
+                '.label': { text: '结束', 'ref-y': 0.5, 'y-alignment': 'middle' }
+                // '.port-body': { width: 10, height: 10, x: -5, stroke: 'gray', fill: 'lightgray', magnet: 'active' }
+            }
+        });
+        stencilGraph.addCells([endModel]);
+
+        var branch = new joint.shapes.devs.Model({
+            position: { x: 25, y: 300 },
+            size: { width: 71, height: 71 },
+            inPorts: ['in'],
+            outPorts: ['out'],
+            ports: {
+                groups: {
+                    'in': {
+                        attrs: {
+                            '.port-body': {
+                                fill: '#16A085',
+                                magnet: 'passive'
+                            }
+                        },
+                        position: 'top'
+                    },
+                    'out': {
+                        attrs: {
+                            '.port-body': {
+                                fill: '#E74C3C'
+                            }
+                        },
+                        position: 'bottom'
+                    }
+                }
+            },
+            attrs: {
+                '.label': { text: '分支', 'ref-x': .5, 'ref-y': .4 },
+                rect: { fill: '#FFA07A', transform: 'rotate(45, 35.5, 35.5), scale' },
+            }
+        });
+
+
+        stencilGraph.addCells([branch]);
     }
 }
 </script>
