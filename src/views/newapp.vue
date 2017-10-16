@@ -13,8 +13,8 @@
 
 <template>
     <Row>
-        <Col span='18' offset='2'>
-        <div>
+        <Col span='22' offset='1'>
+        <div id="base">
             <h1 align="center">新建应用软件流程</h1>
             <br>
             <br>
@@ -23,10 +23,19 @@
                     <Col span='4'>
                     <div id="stencil" style="border:1px solid"></div>
                     </Col>
-                    <Col span='16'>
+                    <Col span='14'>
                     <div id="myholder" style="border:1px solid"></div>
                     </Col>
+                    <Col span='6'>
+                    <Card>
+                        <p slot="title">标准卡片</p>
+                        <div v-if="selected!=undefined">
+                            <p >{{selected.model.id}}</p>
 
+                        </div>
+                    </Card>    
+
+                    </Col>
                 </Row>
             </div>
         </div>
@@ -37,6 +46,23 @@
 export default {
     data() {
         return {
+            selected:{
+                model:{
+                    id:''
+                }
+            },
+            graph:{
+
+            },
+            stencilGraph:{
+
+            },
+            stencilPaper:{
+
+            },
+            paper:{
+
+            }
 
         }
     },
@@ -74,54 +100,29 @@ export default {
         // console.log('test a');
         // console.log($('#myholder'));
         // console.log('test b');
-        let graph = new joint.dia.Graph;
+
+        var self = this;
+        this.graph = new joint.dia.Graph;
+        // var graph = this.graph;
 
 
-        var stencilGraph = new joint.dia.Graph,
-            stencilPaper = new joint.dia.Paper({
+        this.stencilGraph = new joint.dia.Graph,
+        this.stencilPaper = new joint.dia.Paper({
                 el: $('#stencil'),
                 width: $('#stencil').width(),
                 height: 720,
-                model: stencilGraph,
+                model: self.stencilGraph,
                 interactive: false,
 
                 background: {
                     color: '#FAEBD7'
                 }
             });
+        
+        // var stencilGraph = this.stencilGraph;
+        // var stencilPaper = this.stencilPaper;
 
-        // var r1 = new joint.shapes.basic.Rect({
-        //     position: {
-        //         x: 10,
-        //         y: 10
-        //     },
-        //     size: {
-        //         width: 100,
-        //         height: 40
-        //     },
-        //     attrs: {
-        //         text: {
-        //             text: 'Rect1'
-        //         }
-        //     }
-        // });
-        // var r2 = new joint.shapes.basic.Rect({
-        //     position: {
-        //         x: 120,
-        //         y: 10
-        //     },
-        //     size: {
-        //         width: 100,
-        //         height: 40
-        //     },
-        //     attrs: {
-        //         text: {
-        //             text: 'Rect2'
-        //         }
-        //     }
-        // });
-
-        stencilPaper.on('cell:pointerdown', function(cellView, e, x, y) {
+        this.stencilPaper.on('cell:pointerdown', function(cellView, e, x, y) {
             $('#testdiv').append('<div id="flyPaper" style="position:fixed;z-index:100;opacity:.7;pointer-event:none;"></div>');
             var flyGraph = new joint.dia.Graph,
                 flyPaper = new joint.dia.Paper({
@@ -151,14 +152,14 @@ export default {
             $('#testdiv').on('mouseup.fly', function(e) {
                 var x = e.pageX,
                     y = e.pageY,
-                    target = paper.$el.offset();
+                    target = self.paper.$el.offset();
 
                 // Dropped over paper ?
-                if (x > target.left && x < target.left + paper.$el.width() && y > target.top && y < target.top + paper.$el.height()) {
+                if (x > target.left && x < target.left + self.paper.$el.width() && y > target.top && y < target.top + self.paper.$el.height()) {
                     var s = flyShape.clone();
                     s.position(x - target.left - offset.x, y - target.top - offset.y);
-                    graph.addCell(s);
-                    console.log(graph.toJSON());
+                    self.graph.addCell(s);
+                    console.log(self.graph.toJSON());
                 }
                 $('#testdiv').off('mousemove.fly').off('mouseup.fly');
                 flyShape.remove();
@@ -166,11 +167,11 @@ export default {
             });
         });
 
-        let paper = new joint.dia.Paper({
+        this.paper = new joint.dia.Paper({
             el: $('#myholder'),
             width: $('#myholder').width(),
             height: 1000,
-            model: graph,
+            model: self.graph,
             gridSize: 10,
             background: {
                 color: '#F0F8FF'
@@ -211,15 +212,17 @@ export default {
             })
         });
 
+        // var paper = this.paper;
+
         function isLinkInvalid(link) {
             return (!link.prop('source/id') || !link.prop('target/id'));
         }
 
-        paper.on('cell:pointerup', function(cellView) {
+        this.paper.on('cell:pointerup', function(cellView) {
             if (!(cellView.model instanceof joint.dia.Link)) return; // if it's not a link, don't worry about it
             // otherwise, add an event listener to it.  
             // cellView.model.on('batch:stop', function(){
-            var links = graph.getLinks();
+            var links = self.graph.getLinks();
             links.forEach(function(link) {
                 if (isLinkInvalid(link)) {
                     link.remove();
@@ -228,19 +231,37 @@ export default {
             // });
         });
 
-        var highlightedCellViews = [];
+        // var highlightedCellViews = [];
         var highlighted;
-        paper.on('cell:pointerclick', function(cellView) {
+        // var self = this;
+        this.paper.on('cell:pointerclick', function(cellView) {
             if (highlighted != undefined)
                 highlighted.unhighlight();
             cellView.highlight();
             highlighted = cellView;
+            self.selected = highlighted;
+            console.log('select');
+            console.log(self.selected);
+            // console.log(self.selected.model.attributes.attrs[".label"].text);
+            // self.selected.model.attributes.attrs[".label"].text = "123";
+            console.log('graph');
+            console.log(self.graph.getCell(self.selected.model.id));
+            var cell = self.graph.getCell(self.selected.model.id);
+            var cellType = cell.attributes.type;
+            console.log(cellType);
+            console.log(cell.isElement());
+            // console.log(self.graph.getCells());
+            // graph.getCells()[0].attr('text/text', "Fire incident changed");
+            // self.selected.attr('text/text', "Fire incident changed");
+            // this.selected.model.label(0, { attrs: { text: { text: 'new label' } } });
+            // this.selected.model.
         });
 
-        paper.on('blank:pointerclick', function(cellView) {
+        this.paper.on('blank:pointerclick', function(cellView) {
             if (highlighted != undefined)
                 highlighted.unhighlight();
             highlighted = undefined;
+            self.selected = undefined;
         });
 
         var am = new joint.shapes.devs.Model({
@@ -248,6 +269,7 @@ export default {
             size: { width: 70, height: 60 },
             inPorts: ['in'],
             outPorts: ['out'],
+            type:'AM',
             ports: {
                 groups: {
                     'in': {
@@ -284,16 +306,16 @@ export default {
 
         // var m3 = m1.clone();
         // m3.translate(0, 0)
-        stencilGraph.addCells([am]);
-        console.log(graph.toJSON());
+        this.stencilGraph.addCells([am]);
+        console.log(self.graph.toJSON());
 
 
         //resize paper
-        window.onresize = function(event) {
+        $('#base').onresize = function(event) {
             console.log('...window resize');
-            paper.setDimensions($('#myholder').width());
+            self.paper.setDimensions($('#myholder').width());
             // paper.scaleContentToFit({minScaleX: 0, minScaleY: 0, maxScaleX: 1 , maxScaleY: 1});
-            stencilPaper.setDimensions($('#stencil').width());
+            self.stencilPaper.setDimensions($('#stencil').width());
             // stencilPaper.scaleContentToFit({minScaleX: 0, minScaleY: 0, maxScaleX: 1 , maxScaleY: 1});
         };
 
@@ -323,6 +345,7 @@ export default {
             },
             // inPorts: ['in'],
             outPorts: ['out'],
+            type:'Start',
             ports: {
                 groups: {
                     'in': {
@@ -352,7 +375,7 @@ export default {
         });
 
 
-        stencilGraph.addCells([startModel]);
+        self.stencilGraph.addCells([startModel]);
 
         var endModel = new joint.shapes.devs.CircleModel({
             position: {
@@ -365,6 +388,7 @@ export default {
             },
             inPorts: ['in'],
             // outPorts: ['out'],
+            type:'End',
             ports: {
                 groups: {
                     'in': {
@@ -392,11 +416,12 @@ export default {
                 // '.port-body': { width: 10, height: 10, x: -5, stroke: 'gray', fill: 'lightgray', magnet: 'active' }
             }
         });
-        stencilGraph.addCells([endModel]);
+        self.stencilGraph.addCells([endModel]);
 
         var branch = new joint.shapes.devs.Model({
             position: { x: 25, y: 300 },
             size: { width: 71, height: 71 },
+            type:'Branch',
             inPorts: ['in'],
             outPorts: ['out'],
             ports: {
@@ -427,7 +452,7 @@ export default {
         });
 
 
-        stencilGraph.addCells([branch]);
+        self.stencilGraph.addCells([branch]);
     }
 }
 </script>
