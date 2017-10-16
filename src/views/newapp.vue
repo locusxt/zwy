@@ -28,9 +28,10 @@
                     </Col>
                     <Col span='6'>
                     <Card>
-                        <p slot="title">标准卡片</p>
+                        <p slot="title">属性</p>
                         <div v-if="selected!=undefined">
-                            <p >{{selected.model.id}}</p>
+                            <p><strong>编号：</strong>{{selected.id}}</p>
+                            <p><strong>类型：</strong>{{selected.type}}</p>
 
                         </div>
                     </Card>    
@@ -239,17 +240,20 @@ export default {
                 highlighted.unhighlight();
             cellView.highlight();
             highlighted = cellView;
-            self.selected = highlighted;
-            console.log('select');
-            console.log(self.selected);
+            // self.selected = highlighted;
+            // console.log('select');
+            // console.log(self.selected);
             // console.log(self.selected.model.attributes.attrs[".label"].text);
             // self.selected.model.attributes.attrs[".label"].text = "123";
-            console.log('graph');
-            console.log(self.graph.getCell(self.selected.model.id));
-            var cell = self.graph.getCell(self.selected.model.id);
+            self.selected = {};//selected的内容不与highlighted绑定在一起
+            self.selected.id = highlighted.model.id;
+            var cell = self.graph.getCell(self.selected.id);
             var cellType = cell.attributes.type;
-            console.log(cellType);
-            console.log(cell.isElement());
+            self.selected.type = cellType;
+            // console.log(self.selected);
+            // console.log(cellType);
+            // console.log(cell.isElement());
+
             // console.log(self.graph.getCells());
             // graph.getCells()[0].attr('text/text', "Fire incident changed");
             // self.selected.attr('text/text', "Fire incident changed");
