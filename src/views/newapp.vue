@@ -2,6 +2,9 @@
 @import '/static/css/joint.min.css';
 
 
+
+
+
 /* #stencil,
 #myholder {
     height: 100%;
@@ -28,21 +31,39 @@
                     </Col>
                     <Col span='6'>
                     <Card>
-                        <p slot="title">属性</p>
-                        <div v-if="selected!=undefined">
-                            <p><strong>编号：</strong>{{selected.id}}</p>
-                            <p><strong>类型：</strong>{{selected.type}}</p>
-                            <div v-if="selected.type=='AM' && configs[selected.id]!=undefined">
-                                <p><strong>预计运行次数：</strong></p>
-                                <Input v-model="configs[selected.id].loopnum"></Input>
-                                <p><strong>算法模式：<amSelector @transferAM='getAM'></amSelector></strong></p>
-                                <div v-if="configs[selected.id].am != undefined">
-                                    <p>名称：{{configs[selected.id].am.name}}</p>
-                                    <p>编号：{{configs[selected.id].am._id}}</p>
+                        <Tabs value="name1">
+                            <TabPane label="属性" name="name1">
+                                <div v-if="selected!=undefined">
+                                    <p>
+                                        <strong>编号：</strong>{{selected.id}}</p>
+                                    <p>
+                                        <strong>类型：</strong>{{selected.type}}</p>
+                                    <div v-if="selected.type=='AM' && configs[selected.id]!=undefined">
+                                        <p>
+                                            <strong>预计运行次数：</strong>
+                                        </p>
+                                        <Input v-model="configs[selected.id].loopnum"></Input>
+                                        <p>
+                                            <strong>算法模式：
+                                                <amSelector @transferAM='getAM'></amSelector>
+                                            </strong>
+                                        </p>
+                                        <div v-if="configs[selected.id].am != undefined">
+                                            <p>名称：{{configs[selected.id].am.name}}</p>
+                                            <p>编号：{{configs[selected.id].am._id}}</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div v-if='this.selected.id != undefined'>
+                                        <Button type="primary" @click="deleteNode()">删除</Button>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </Card>    
+                            </TabPane>
+                            <TabPane label="配置" name="name2">标签二的内容</TabPane>
+                            <TabPane label="分析" name="name3">标签三的内容</TabPane>
+                        </Tabs>
+
+                    </Card>
 
                     </Col>
                 </Row>
@@ -56,24 +77,24 @@ import amSelector from '../components/amselector'
 export default {
     data() {
         return {
-            configs:{
+            configs: {
 
             },
-            selected:{
-                model:{
-                    id:''
+            selected: {
+                model: {
+                    id: ''
                 }
             },
-            graph:{
+            graph: {
 
             },
-            stencilGraph:{
+            stencilGraph: {
 
             },
-            stencilPaper:{
+            stencilPaper: {
 
             },
-            paper:{
+            paper: {
 
             }
 
@@ -105,17 +126,26 @@ export default {
         getConfigs(msg) {
             this.formItem.configs = msg;
         },
-        getAM(msg){
+        getAM(msg) {
             var id = this.selected.id;
             this.$set(this.configs[id], 'am', msg);
             var cell = this.graph.getCell(id);
             cell.attr('text/text', msg.name);
             // this.configs[this.selected.id].am = msg;
             console.log(msg);
+        },
+        deleteNode() {
+            if (this.selected != undefined) {
+                var id = this.selected.id;
+                var cell = this.graph.getCell(id);
+                cell.remove();
+                this.selected = undefined;
+                console.log('delete node');
+            }
         }
     },
     components: {
-        amSelector 
+        amSelector
     },
     mounted() {
         // console.log('test a');
@@ -128,7 +158,7 @@ export default {
 
 
         this.stencilGraph = new joint.dia.Graph,
-        this.stencilPaper = new joint.dia.Paper({
+            this.stencilPaper = new joint.dia.Paper({
                 el: $('#stencil'),
                 width: $('#stencil').width(),
                 height: 400,
@@ -139,7 +169,7 @@ export default {
                     color: '#FAEBD7'
                 }
             });
-        
+
         // var stencilGraph = this.stencilGraph;
         // var stencilPaper = this.stencilPaper;
 
@@ -256,7 +286,7 @@ export default {
         var highlighted;
         // var self = this;
         this.paper.on('cell:pointerclick', function(cellView) {
-            if (highlighted != undefined){
+            if (highlighted != undefined) {
                 self.selected = undefined;
                 highlighted.unhighlight();
             }
@@ -266,13 +296,13 @@ export default {
             // self.selected.model.attributes.attrs[".label"].text = "123";
             //以下是选中的时候会发生的事情
             self.selected = {};//selected的内容不与highlighted绑定在一起
-            
+
             var cellId = highlighted.model.id;
             self.selected.id = cellId;
             var cell = self.graph.getCell(self.selected.id);
             var cellType = cell.attributes.type;
             self.selected.type = cellType;
-            if (cellType == "AM" && self.configs[cellId] == undefined){
+            if (cellType == "AM" && self.configs[cellId] == undefined) {
                 // self.configs[cellId] = {
                 //     loopnum:0,
                 //     name:'',
@@ -280,10 +310,10 @@ export default {
                 //     subconfigs:[]
                 // }
                 self.$set(self.configs, cellId, {
-                    loopnum:1,
-                    name:'',
-                    id:'',
-                    subconfigs:[]
+                    loopnum: 1,
+                    name: '',
+                    id: '',
+                    subconfigs: []
                 });
             }
             // console.log(self.selected);
@@ -309,7 +339,7 @@ export default {
             size: { width: 70, height: 60 },
             inPorts: ['in'],
             outPorts: ['out'],
-            type:'AM',
+            type: 'AM',
             ports: {
                 groups: {
                     'in': {
@@ -376,7 +406,7 @@ export default {
             },
             // inPorts: ['in'],
             outPorts: ['out'],
-            type:'Start',
+            type: 'Start',
             ports: {
                 groups: {
                     'in': {
@@ -419,7 +449,7 @@ export default {
             },
             inPorts: ['in'],
             // outPorts: ['out'],
-            type:'End',
+            type: 'End',
             ports: {
                 groups: {
                     'in': {
@@ -452,7 +482,7 @@ export default {
         var branch = new joint.shapes.devs.Model({
             position: { x: 25, y: 300 },
             size: { width: 71, height: 71 },
-            type:'Branch',
+            type: 'Branch',
             inPorts: ['in'],
             outPorts: ['out'],
             ports: {
