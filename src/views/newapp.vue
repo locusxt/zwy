@@ -21,7 +21,7 @@
             <div id="testdiv">
                 <Row>
                     <Col span='4'>
-                    <div id="stencil" style="border:1px solid"></div>
+                    <div id="stencil" style="border:1px solid;"></div>
                     </Col>
                     <Col span='14'>
                     <div id="myholder" style="border:1px solid"></div>
@@ -35,9 +35,11 @@
                             <div v-if="selected.type=='AM' && configs[selected.id]!=undefined">
                                 <p><strong>预计运行次数：</strong></p>
                                 <Input v-model="configs[selected.id].loopnum"></Input>
-                                <p><strong>算法模式：</strong></p>
-                                <p>名称：{{configs[selected.id].name}}</p>
-                                <p>编号：{{configs[selected.id].id}}</p>
+                                <p><strong>算法模式：<amSelector @transferAM='getAM'></amSelector></strong></p>
+                                <div v-if="configs[selected.id].am != undefined">
+                                    <p>名称：{{configs[selected.id].am.name}}</p>
+                                    <p>编号：{{configs[selected.id].am._id}}</p>
+                                </div>
                             </div>
                         </div>
                     </Card>    
@@ -50,6 +52,7 @@
     </Row>
 </template>
 <script>
+import amSelector from '../components/amselector'
 export default {
     data() {
         return {
@@ -101,10 +104,18 @@ export default {
         },
         getConfigs(msg) {
             this.formItem.configs = msg;
+        },
+        getAM(msg){
+            var id = this.selected.id;
+            this.$set(this.configs[id], 'am', msg);
+            var cell = this.graph.getCell(id);
+            cell.attr('text/text', msg.name);
+            // this.configs[this.selected.id].am = msg;
+            console.log(msg);
         }
     },
     components: {
-
+        amSelector 
     },
     mounted() {
         // console.log('test a');
@@ -120,7 +131,7 @@ export default {
         this.stencilPaper = new joint.dia.Paper({
                 el: $('#stencil'),
                 width: $('#stencil').width(),
-                height: 720,
+                height: 400,
                 model: self.stencilGraph,
                 interactive: false,
 
@@ -182,7 +193,7 @@ export default {
             width: $('#myholder').width(),
             height: 1000,
             model: self.graph,
-            gridSize: 10,
+            gridSize: 5,
             background: {
                 color: '#F0F8FF'
             },
