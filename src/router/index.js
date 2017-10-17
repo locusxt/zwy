@@ -18,6 +18,7 @@ import appSide from '@/views/app-side';
 import newApp from '@/views/newapp';
 import newam from '@/views/newam';
 import amview from '@/views/amview';
+import amTest from '@/views/amtest';
 
 Vue.use(Router)
 
@@ -110,6 +111,13 @@ export default new Router({
             path:'cmtest',
             components:{
                 main:cmTest,
+                side:testSide,
+            }
+        },
+        {
+            path:'amtest',
+            components:{
+                main:amTest,
                 side:testSide,
             }
         }

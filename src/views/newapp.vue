@@ -23,10 +23,10 @@
             <br>
             <div id="testdiv">
                 <Row>
-                    <Col span='4'>
+                    <Col span='3'>
                     <div id="stencil" style="border:1px solid;"></div>
                     </Col>
-                    <Col span='14'>
+                    <Col span='15'>
                     <div id="myholder" style="border:1px solid"></div>
                     </Col>
                     <Col span='6'>
@@ -55,7 +55,7 @@
                                     </div>
                                     <hr>
                                     <div v-if='this.selected.id != undefined'>
-                                        <Button type="primary" @click="deleteNode()">删除</Button>
+                                        <Button type="error" @click="deleteNode()">删除</Button>
                                     </div>
                                 </div>
                             </TabPane>
@@ -142,6 +142,10 @@ export default {
                 this.selected = undefined;
                 console.log('delete node');
             }
+        },
+        getAllAMs(){
+            var cells = this.graph.getCells();
+            
         }
     },
     components: {
@@ -160,7 +164,8 @@ export default {
         this.stencilGraph = new joint.dia.Graph,
             this.stencilPaper = new joint.dia.Paper({
                 el: $('#stencil'),
-                width: $('#stencil').width(),
+                // width: $('#stencil').width(),
+                width:125,
                 height: 400,
                 model: self.stencilGraph,
                 interactive: false,
@@ -376,7 +381,7 @@ export default {
             console.log('...window resize');
             self.paper.setDimensions($('#myholder').width());
             // paper.scaleContentToFit({minScaleX: 0, minScaleY: 0, maxScaleX: 1 , maxScaleY: 1});
-            self.stencilPaper.setDimensions($('#stencil').width());
+            // self.stencilPaper.setDimensions($('#stencil').width());
             // stencilPaper.scaleContentToFit({minScaleX: 0, minScaleY: 0, maxScaleX: 1 , maxScaleY: 1});
         };
 

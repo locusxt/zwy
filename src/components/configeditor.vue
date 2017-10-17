@@ -14,10 +14,10 @@
 
 <script>
 
-
+//传入的configs中不能存在有值的value
 export default {
     props: {
-            cur:Object
+            configs:Array
     },
     data() {
         return {
@@ -25,12 +25,23 @@ export default {
         }
     },
     watch:{
-        cur(cur_v, old_v){
-            this.res_configs = this.cur.configs.map(i=>{
-                // i.value = '';
+        configs(cur_v, old_v){
+            // for(var i in this.configs){
+            //     if(this.configs[i].value != undefined)
+            //         this.res_configs.push(this.configs[i])
+            // }
+            // console.log('in watch');
+            this.res_configs = this.configs.filter(c=>{
+                return c.value == undefined || c.value == '';
+            }).map(i=>{
                 this.$set(i, 'value', '');
                 return i;
-            });
+            })
+            // this.res_configs = this.configs.map(i=>{
+            //     if (i.value == undefined)
+            //         this.$set(i, 'value', '');
+            //     return i;
+            // });
         },
         res_configs(cur_v, old_v){
             console.log("change");

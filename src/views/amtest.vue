@@ -2,13 +2,13 @@
     <Row>
         <i-col span='18' offset='2'>
             <div>
-                <h1 align="center">测试计算模式</h1>
+                <h1 align="center">测试算法模式</h1>
                 <br />
             </div>
         </i-col>
         <i-col span='18' offset='2'>
-            <h2>计算模式：&nbsp;&nbsp;&nbsp;
-                <cmSelector @transferCM="getCM"></cmSelector>
+            <h2>算法模式：&nbsp;&nbsp;&nbsp;
+                <amSelector @transferAM="getAM"></amSelector>
             </h2>
             <div>
                 <p>名称：{{cur.name}}</p>
@@ -21,6 +21,7 @@
             <h2>可配置项：</h2>
             <div>
                 <configEditor :configs="cur.configs" @transferConfigs="getConfigs"></configEditor>
+                <configEditor :configs="cur.subconfigs" @transferConfigs="getSubConfigs"></configEditor>
             </div>
             <br>
 
@@ -65,12 +66,19 @@
                 <Table :columns="columns" :data="tests"></Table>
             </div>
             <br>
-            <Button type="primary" @click="newtestModal=true">添加测试</Button>
+            <Button type="primary" @click="clickNewTest">添加测试</Button>
             <Modal v-model="newtestModal" title="添加测试" width="720" @on-ok="addTest">
                 <p><strong>负责人：</strong></p>
                 <Input v-model="newtest.leader"></Input>
-                <p><strong>结果(秒)：</strong></p>
+                <p><strong>总时间(秒)：</strong></p>
                 <Input v-model="newtest.result"></Input>
+                <ul>
+                <li v-for="cm in newtest.cms">
+                    <p>{{cm.name}}(权重:{{cm.weight}})</p>
+                    <Input v-model=cm.result>
+                    </Input>
+                </li>
+                </ul>
                 <p><strong>备注：</strong></p>
                 <Input v-model="newtest.remark"></Input>
             </Modal>
@@ -78,7 +86,7 @@
     </Row>
 </template>
 <script>
-import cmSelector from "../components/cmselector"
+import amSelector from "../components/amselector"
 import configEditor from "../components/configeditor"
 import runtimeSelector from "../components/runtimeselector"
 import problemSelector from "../components/problemselector"
@@ -98,7 +106,9 @@ export default {
                 leader: '',
                 version: '',
                 date: '',
-                configs: []
+                configs: [],
+                cms:[],
+                subconfigs:[]
             },
             runtime: {
                 name: '未选择',
@@ -117,6 +127,7 @@ export default {
                 gen: ''
             },
             configs: [],
+            subConfigs:[],
             columns: [
                 {
                     title: '编号',
@@ -153,10 +164,10 @@ export default {
                 console.log(response);
             });
         },
-        getConfigs(msg) {
-            this.formItem.configs = msg;
-        },
-        getCM(msg) {
+        // getConfigs(msg) {
+        //     this.formItem.configs = msg;
+        // },
+        getAM(msg) {
             this.cur = msg;
             console.log(msg);
         },
@@ -166,6 +177,10 @@ export default {
         },
         getConfigs(msg) {
             this.configs = msg;
+            console.log(msg);
+        },
+        getSubConfigs(msg){
+            this.subConfigs = msg;
             console.log(msg);
         },
         getProblem(msg) {
@@ -180,13 +195,13 @@ export default {
         },
         assempleInfo() {
             var info = {};
-            info.cm = this.cur;
+            info.am = this.cur;
             info.runtime = this.runtime;
             info.problem = this.problem;
             // info.configs = this.configs;
             info.dataset = this.dataset;
 
-            info.cm.id = this.cur._id;
+            info.am.id = this.cur._id;
             info.runtime.id = this.runtime._id;
             info.problem.id = this.problem._id;
             info.dataset.id = this.dataset._id;
@@ -196,21 +211,26 @@ export default {
                 var c = this.configs[i];
                 info.configs[c.name] = c.value;
             }
+            info.subConfigs = {};
+            for (var i in this.subConfigs) {
+                var c = this.subConfigs[i];
+                info.subConfigs[c.name] = c.value;
+            }
             return info;
         },
         searchTest() {
             var info = this.assempleInfo();
             // console.log(info);
             var self = this;
-            this.$ajax({
-                    method:'post',
-                    url:'/api/getcmtest',
-                    data:info
-                }).then(function(response){
-                    console.log("this is response");
-                    console.log(response);
-                    self.tests = response.data;
-                });
+            // this.$ajax({
+            //         method:'post',
+            //         url:'/api/getcmtest',
+            //         data:info
+            //     }).then(function(response){
+            //         console.log("this is response");
+            //         console.log(response);
+            //         self.tests = response.data;
+            //     });
         },
         addTest(){
             // console.log(this.newtest);
@@ -220,26 +240,33 @@ export default {
             this.newtest.time = Date();
             var self = this;
 
-                this.$ajax({
-                    method:'post',
-                    url:'/api/addcmtest',
-                    data:{info:myinfo, newtest:this.newtest}
-                }).then(function(response){
-                    console.log("this is response");
-                    console.log(response);
-                    self.newtest.result = '';
-                    self.newtest.remark = '';
-                    this.searchTest();
-                });
+                // this.$ajax({
+                //     method:'post',
+                //     url:'/api/addcmtest',
+                //     data:{info:myinfo, newtest:this.newtest}
+                // }).then(function(response){
+                //     console.log("this is response");
+                //     console.log(response);
+                //     self.newtest.result = '';
+                //     self.newtest.remark = '';
+                //     this.searchTest();
+                // });
 
 
             // var info = this.assempleInfo();
             // console.log(info);
+        },
+        clickNewTest(){
+            this.newtestModal=true;
+            this.newtest.cms = this.cur.cms;
+            this.newtest.cms.map(cm=>{
+                this.$set(cm, 'result', 0);
+            });
         }
 
     },
     components: {
-        cmSelector, configEditor, runtimeSelector, problemSelector, datasetSelector
+        amSelector, configEditor, runtimeSelector, problemSelector, datasetSelector
     }
 }
 </script>
