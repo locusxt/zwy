@@ -229,7 +229,7 @@ export default {
                     console.log(response);
                     self.newtest.result = '';
                     self.newtest.remark = '';
-                    this.searchTest();
+                    self.searchTest();
                 });
 
 

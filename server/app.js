@@ -84,6 +84,47 @@ router.post('/api/getcmtest', (req, res)=>{
   });
 });
 
+
+router.post('/api/addamtest', (req, res)=>{
+  console.log(req.body);
+  let AMTest = models.AMTest;
+  AMTest.update(req.body.info, {$addToSet:{"tests":req.body.newtest}}, {upsert:true}, (err, docs)=>{
+    if(err) {
+      console.log(err);
+      res.send(err);
+    }
+    else 
+      res.send('create AMTest successed');
+  });
+});
+
+router.post('/api/getamtest', (req, res)=>{
+  console.log(req.body);
+  let AMTest = models.AMTest;
+  // AMTest.findOne(req.body).exec().then(data=>{
+  //   // console.log(data);
+  //   console.log('amtest:');
+  //   console.log(data);
+  //   if(data.tests != undefined)
+  //     res.send(data.tests);
+  //   else
+  //     res.send([]);
+  // });
+  AMTest.findOne(req.body, function(err, doc){
+    if(err){
+      console.log("error");
+      console.log(err);
+      res.send([]);
+    }
+    else{
+      if (doc == null)
+        res.send([]);
+      else
+        res.send(doc.tests);
+    }
+  });
+});
+
 router.post('/api/createcmtest', (req, res)=>{
   console.log(req.body);
   let newCMTest = new models.CMTest(req.body);
@@ -153,13 +194,13 @@ router.get('/api/getdataset', (req, res)=>{
   });
 });
 
-router.get('/api/getcmtest', (req, res)=>{
-  let CMTest = models.CMTest;
-  CMTest.find().exec().then(data=>{
-    console.log(data);
-    res.send(data);
-  });
-});
+// router.get('/api/getcmtest', (req, res)=>{
+//   let CMTest = models.CMTest;
+//   CMTest.find().exec().then(data=>{
+//     console.log(data);
+//     res.send(data);
+//   });
+// });
 
 app.use(router);
 

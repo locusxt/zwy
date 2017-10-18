@@ -55,6 +55,22 @@ const cmTestSchema = mongoose.Schema({
     tests:[{time:String, leader:String, result:Number, remark:String}]
 });
 
+const amTestSchema = mongoose.Schema({
+    // am:{name:{type:String}, id:{type:String}},
+    am:{name:String, id:String},
+    runtime:{name:String, id:String},
+    problem:{name:String, id:String},
+    dataset:{name:String, id:String},
+    configs:{},
+    subconfigs:{},
+    tests:[{
+        time:String, leader:String, result:Number, remark:String,
+        cms:[{
+            id:String, name:String, weight:Number, result:Number
+        }]
+    }]
+}, { strict: true });
+
 /************** 定义模型Model **************/
 const Models = {
     Login : mongoose.model('Login',loginSchema),
@@ -63,7 +79,7 @@ const Models = {
     Runtime : mongoose.model('Runtime', runtimeSchema),
     Dataset : mongoose.model('Dataset', datasetSchema),
     CMTest: mongoose.model('CMTest', cmTestSchema),
-    
+    AMTest: mongoose.model('AMTest', amTestSchema),
 }
 
 module.exports = Models;

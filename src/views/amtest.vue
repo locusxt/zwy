@@ -99,7 +99,8 @@ export default {
                 leader:'',
                 result:'',
                 time:'',
-                remark:''
+                remark:'',
+                cms:[]
             },
             cur: {
                 name: '未选择',
@@ -168,7 +169,8 @@ export default {
         //     this.formItem.configs = msg;
         // },
         getAM(msg) {
-            this.cur = msg;
+            // this.cur = msg;
+            this.$set(this.$data, 'cur', msg);
             console.log(msg);
         },
         getRuntime(msg) {
@@ -211,26 +213,34 @@ export default {
                 var c = this.configs[i];
                 info.configs[c.name] = c.value;
             }
-            info.subConfigs = {};
+            info.subconfigs = {};
             for (var i in this.subConfigs) {
                 var c = this.subConfigs[i];
-                info.subConfigs[c.name] = c.value;
+                info.subconfigs[c.name] = c.value;
             }
             return info;
         },
         searchTest() {
-            var info = this.assempleInfo();
-            // console.log(info);
+            var myinfo = this.assempleInfo();
+            console.log("info");
+            console.log(myinfo);
             var self = this;
-            // this.$ajax({
-            //         method:'post',
-            //         url:'/api/getcmtest',
-            //         data:info
-            //     }).then(function(response){
-            //         console.log("this is response");
-            //         console.log(response);
-            //         self.tests = response.data;
-            //     });
+            // what?
+            this.newtest.cms = this.cur.cms;
+            this.newtest.cms.map(cm=>{
+                this.$set(cm, 'result', 0);
+            });
+            //
+            this.$ajax({
+                    method:'post',
+                    url:'/api/getamtest',
+                    data:myinfo
+                }).then(function(response){
+                    console.log("this is response");
+                    console.log(response);
+                    console.log(response.data);
+                    self.tests = response.data;
+                });
         },
         addTest(){
             // console.log(this.newtest);
@@ -240,17 +250,17 @@ export default {
             this.newtest.time = Date();
             var self = this;
 
-                // this.$ajax({
-                //     method:'post',
-                //     url:'/api/addcmtest',
-                //     data:{info:myinfo, newtest:this.newtest}
-                // }).then(function(response){
-                //     console.log("this is response");
-                //     console.log(response);
-                //     self.newtest.result = '';
-                //     self.newtest.remark = '';
-                //     this.searchTest();
-                // });
+                this.$ajax({
+                    method:'post',
+                    url:'/api/addamtest',
+                    data:{info:myinfo, newtest:this.newtest}
+                }).then(function(response){
+                    console.log("this is response");
+                    console.log(response);
+                    self.newtest.result = '';
+                    self.newtest.remark = '';
+                    self.searchTest();
+                });
 
 
             // var info = this.assempleInfo();
