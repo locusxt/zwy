@@ -3,9 +3,6 @@
 
 
 
-
-
-
 /* #stencil,
 #myholder {
     height: 100%;
@@ -95,6 +92,12 @@
                                 <br>
                                 <br>
                                 <Button type='warning' @click='genReport'>生成分析报告</Button>
+                                <Modal v-model="reportModal" title="分析报告" width="840">
+                                    <h3>算法模式时间占比(单位:秒)</h3>
+                                    <report :chartsData='amReport' canvasId='ca1'></report>
+                                    <h3>计算模式时间占比(单位:秒)</h3>
+                                    <report :chartsData='cmReport' canvasId='ca2'></report>
+                                </Modal>
                             </TabPane>
                         </Tabs>
 
@@ -113,6 +116,9 @@ import configEditor from '../components/configeditor'
 import runtimeSelector from "../components/runtimeselector"
 import problemSelector from "../components/problemselector"
 import datasetSelector from "../components/datasetselector"
+import report from "../components/report"
+
+
 export default {
     data() {
         return {
@@ -140,11 +146,14 @@ export default {
             asp_subconfigs: [],
             res_configs: {},
             res_subconfigs: {},
-            env:{
-                runtime:{},
-                problem:{},
-                dataset:{}
-            }
+            env: {
+                runtime: {},
+                problem: {},
+                dataset: {}
+            },
+            reportModal: false,
+            amReport:{},
+            cmReport:{}
         }
     },
     methods: {
@@ -172,6 +181,8 @@ export default {
         },
         getAM(msg) {
             var id = this.selected.id;
+            if(this.configs[id] == undefined)
+                this.configs[id] = {};
             this.$set(this.configs[id], 'am', msg);
             var cell = this.graph.getCell(id);
             cell.attr('text/text', msg.name);
@@ -223,8 +234,8 @@ export default {
             }
             return res;
         },
-        assempleAMs(){//获取所有AM的信息，允许重复
-            var res =[]
+        assempleAMs() {//获取所有AM的信息，允许重复
+            var res = []
             var ams = this.getAllAMs();
             for (var i in ams) {
                 var cell = ams[i];
@@ -232,8 +243,8 @@ export default {
                 var id = this.configs[cellId].am._id;
                 var loopn = this.configs[cellId].loopnum;
                 res.push({
-                    amid:id,
-                    loopnum:loopn
+                    amid: id,
+                    loopnum: loopn
                 })
             }
             return res;
@@ -298,33 +309,34 @@ export default {
             // console.log("assemple dataset");
             // console.log(this.assempleInfo());
         },
-        genReport(){
-            var info ={};
+        genReport() {
+            var info = {};
             info.configs = this.res_configs;
             info.subconfigs = this.res_subconfigs;
             info.env = {
-                runtimeid :this.env.runtime._id,
-                problemid :this.env.problem._id,
-                datasetid :this.env.dataset._id
+                runtimeid: this.env.runtime._id,
+                problemid: this.env.problem._id,
+                datasetid: this.env.dataset._id
             };
             info.ams = this.assempleAMs();
             console.log('report');
             console.log(info);
+            var self = this;
             this.$ajax({
-                    method:'post',
-                    url:'/api/genreport',
-                    data:info
-                }).then(function(response){
-                    console.log("this is report response");
-                    console.log(response);
-                    // self.newtest.result = '';
-                    // self.newtest.remark = '';
-                    // self.searchTest();
-                });
+                method: 'post',
+                url: '/api/genreport',
+                data: info
+            }).then(function(response) {
+                console.log("this is report response");
+                console.log(response);
+                self.amReport = response.data.amReport;
+                self.cmReport = response.data.cmReport;
+                self.reportModal = true;
+            });
         }
     },
     components: {
-        amSelector, configEditor, runtimeSelector, problemSelector, datasetSelector
+        amSelector, configEditor, runtimeSelector, problemSelector, datasetSelector, report
     },
     mounted() {
         // console.log('test a');
@@ -699,6 +711,10 @@ export default {
 
 
         self.stencilGraph.addCells([branch]);
+
+
+
+        
     }
 }
 </script>

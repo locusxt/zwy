@@ -146,6 +146,29 @@ router.post('/api/genreport', (req, res)=>{
   var subconfigs = req.body.subconfigs;
 
   let AMTest = models.AMTest;
+  let AM = models.AM;
+
+  var amsGetnamePromise = ams.map(am=>{
+    return new Promise(resolve=>{
+      var query = {};
+      query._id = am.amid;
+      // console.log(query);
+      AM.findOne(query, function(err, doc){
+        var res = '';
+        if (err)
+          console.log('err');
+        else{
+          if(doc != null)
+            res = doc.name;
+        }
+        resolve({
+          amid:am.amid,
+          name:res
+        });
+      });
+    });
+  });
+
   var amsPromise = ams.map(am=>{
     return new Promise(resolve=>{
       var query = env;
@@ -167,10 +190,68 @@ router.post('/api/genreport', (req, res)=>{
       });
     });
   });
-  Promise.race(amsPromise).then(result=>{
+  var promises = amsGetnamePromise.concat(amsPromise);
+  Promise.all(promises).then(result=>{
     console.log(result);
-    res.send('get');
-  })
+    var amReport = {};
+    var cmReport = {};
+    for (var i = 0; i < result.length / 2; ++i){
+      var r1 = result[i];
+      if (amReport[r1.amid] == undefined){
+        amReport[r1.amid] = {};
+        amReport[r1.amid].name = r1.name;
+        amReport[r1.amid].loopnum = 0;
+      }
+      var r2 = result[i + result.length / 2];
+      amReport[r2.amid].loopnum += r2.loopnum;
+      if (amReport[r2.amid].tests == undefined)
+        amReport[r2.amid].tests = r2.tests;
+    }
+    for (var k in amReport){
+      var am = amReport[k];
+      // console.log('---');
+      // console.log(am.tests.length);
+      var sumTime = 0;
+      for (var i = 0; i < am.tests.length; ++i){
+        var t = am.tests[i];
+        sumTime += t.result;
+        // console.log(t);
+      }
+      amReport[k].meanTime = sumTime / am.tests.length;
+      amReport[k].totalTime = amReport[k].meanTime * amReport[k].loopnum;
+    }
+
+    for (var k in amReport){
+      var am = amReport[k];
+      var t0 = am.tests[0];
+      console.log('===');
+      console.log(t0);
+      var cms = t0.cms;
+      for (var i = 0; i < cms.length; ++i){
+        var cm = cms[i];
+        if (cmReport[cm.id] == undefined){
+          cmReport[cm.id] = {
+            name:cm.name,
+            totalTime:0
+          };
+        }
+        cmReport[cm.id].totalTime += am.totalTime * cm.weight;
+      }
+    }
+
+    for (var k in amReport){
+      var am = amReport[k];
+      delete amReport[k].tests;
+    }
+
+    console.log(amReport);
+    console.log(cmReport);
+    res.send({
+      amReport:amReport,
+      cmReport:cmReport
+    });
+
+  });
 
 })
 
