@@ -47,20 +47,28 @@ const datasetSchema = mongoose.Schema({
 });
 
 const cmTestSchema = mongoose.Schema({
-    cm:{name:String, id:String},
-    runtime:{name:String, id:String},
-    problem:{name:String, id:String},
-    dataset:{name:String, id:String},
+    // cm:{name:String, id:String},
+    // runtime:{name:String, id:String},
+    // problem:{name:String, id:String},
+    // dataset:{name:String, id:String},
+    cmid:String,
+    runtimeid:String,
+    problemid:String,
+    datasetid:String,
     configs:{},
     tests:[{time:String, leader:String, result:Number, remark:String}]
 });
 
 const amTestSchema = mongoose.Schema({
     // am:{name:{type:String}, id:{type:String}},
-    am:{name:String, id:String},
-    runtime:{name:String, id:String},
-    problem:{name:String, id:String},
-    dataset:{name:String, id:String},
+    // // am:{name:String, id:String},
+    // runtime:{name:String, id:String},
+    // problem:{name:String, id:String},
+    // dataset:{name:String, id:String},
+    amid:String,
+    runtimeid:String,
+    problemid:String,
+    datasetid:String,
     configs:{},
     subconfigs:{},
     tests:[{

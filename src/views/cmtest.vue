@@ -180,16 +180,16 @@ export default {
         },
         assempleInfo() {
             var info = {};
-            info.cm = this.cur;
-            info.runtime = this.runtime;
-            info.problem = this.problem;
-            // info.configs = this.configs;
-            info.dataset = this.dataset;
+            // info.cm = this.cur;
+            // info.runtime = this.runtime;
+            // info.problem = this.problem;
+            // // info.configs = this.configs;
+            // info.dataset = this.dataset;
 
-            info.cm.id = this.cur._id;
-            info.runtime.id = this.runtime._id;
-            info.problem.id = this.problem._id;
-            info.dataset.id = this.dataset._id;
+            info.cmid = this.cur._id;
+            info.runtimeid = this.runtime._id;
+            info.problemid = this.problem._id;
+            info.datasetid = this.dataset._id;
 
             info.configs = {};
             for (var i in this.configs) {

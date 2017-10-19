@@ -2,7 +2,7 @@
   <div>
       <ul>
           <li v-for="c in res_configs">
-                  <Input @on-change="emit" v-model=c.value placeholder="请输入..." style="width: 720px">
+                  <Input @on-change="emit" v-model=c.value placeholder="请输入..." >
                     <span slot="prepend">{{c.name}}({{c.range}})</span>
                   </Input>
                   <br>

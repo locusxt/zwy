@@ -192,12 +192,13 @@ export default {
         getDataset(msg) {
             this.dataset = msg;
             console.log(msg);
-            console.log("assemple dataset");
-            console.log(this.assempleInfo());
+            // console.log("assemple dataset");
+            // console.log(this.assempleInfo());
         },
         assempleInfo() {
             var info = {};
-            info.am = this.cur;
+            // info.am = this.cur;
+            info.am ={};
             info.runtime = this.runtime;
             info.problem = this.problem;
             // info.configs = this.configs;
@@ -220,16 +221,42 @@ export default {
             }
             return info;
         },
+        assempleInfo2() {
+            var info = {};
+            // info.am = this.cur;
+            // info.am ={};
+            // info.runtime = this.runtime;
+            // info.problem = this.problem;
+            // // info.configs = this.configs;
+            // info.dataset = this.dataset;
+
+            info.amid = this.cur._id;
+            info.runtimeid = this.runtime._id;
+            info.problemid = this.problem._id;
+            info.datasetid = this.dataset._id;
+
+            info.configs = {};
+            for (var i in this.configs) {
+                var c = this.configs[i];
+                info.configs[c.name] = c.value;
+            }
+            info.subconfigs = {};
+            for (var i in this.subConfigs) {
+                var c = this.subConfigs[i];
+                info.subconfigs[c.name] = c.value;
+            }
+            return info;
+        },
         searchTest() {
-            var myinfo = this.assempleInfo();
+            var myinfo = this.assempleInfo2();
             console.log("info");
             console.log(myinfo);
             var self = this;
             // what?
-            this.newtest.cms = this.cur.cms;
-            this.newtest.cms.map(cm=>{
-                this.$set(cm, 'result', 0);
-            });
+            // this.newtest.cms = this.cur.cms;
+            // this.newtest.cms.map(cm=>{
+            //     this.$set(cm, 'result', 0);
+            // });
             //
             this.$ajax({
                     method:'post',
@@ -246,7 +273,7 @@ export default {
             // console.log(this.newtest);
             // console.log(this.formItem);
             console.log("in test");
-            var myinfo = this.assempleInfo();
+            var myinfo = this.assempleInfo2();
             this.newtest.time = Date();
             var self = this;
 

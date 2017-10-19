@@ -137,6 +137,43 @@ router.post('/api/createcmtest', (req, res)=>{
   });
 });
 
+router.post('/api/genreport', (req, res)=>{
+  console.log('report');
+  console.log(req.body);
+  var ams = req.body.ams;
+  var env = req.body.env;
+  var configs = req.body.configs;
+  var subconfigs = req.body.subconfigs;
+
+  let AMTest = models.AMTest;
+  var amsPromise = ams.map(am=>{
+    return new Promise(resolve=>{
+      var query = env;
+      query.amid = am.amid;
+      AMTest.findOne(query, function(err, doc){
+        var res = [];
+        if(err){
+          console.log("error");
+        }
+        else{
+          if (doc != null)
+            res = doc.tests;
+        }
+        resolve({
+          amid:am.amid,
+          loopnum:am.loopnum,
+          tests:res
+        });
+      });
+    });
+  });
+  Promise.race(amsPromise).then(result=>{
+    console.log(result);
+    res.send('get');
+  })
+
+})
+
 
 router.get('/api/test1', (req, res)=>{
   let newRuntime = new models.Runtime({

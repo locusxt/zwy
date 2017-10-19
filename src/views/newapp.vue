@@ -5,6 +5,7 @@
 
 
 
+
 /* #stencil,
 #myholder {
     height: 100%;
@@ -59,8 +60,42 @@
                                     </div>
                                 </div>
                             </TabPane>
-                            <TabPane label="配置" name="name2">标签二的内容</TabPane>
-                            <TabPane label="分析" name="name3">标签三的内容</TabPane>
+                            <TabPane label="配置" name="name2">
+                                <configEditor :configs="asp_configs" @transferConfigs="getConfigs"></configEditor>
+                                <configEditor :configs="asp_subconfigs" @transferConfigs="getSubConfigs"></configEditor>
+                            </TabPane>
+                            <TabPane label="分析" name="name3">
+                                <h2>运行环境：
+                                    <runtimeSelector @transferRuntime="getRuntime"></runtimeSelector>
+                                </h2>
+                                <div>
+                                    <p>名称：{{env.runtime.name}}</p>
+                                    <p>CPU：{{env.runtime.cpu}}</p>
+                                    <p>节点个数：{{env.runtime.nodenum}}</p>
+                                </div>
+                                <br>
+                                <h2>测试问题：
+                                    <problemSelector @transferProblem="getProblem"></problemSelector>
+                                </h2>
+                                <div>
+                                    <p>名称：{{env.problem.name}}</p>
+                                    <p>描述：{{env.problem.desc}}</p>
+                                </div>
+                                <br>
+                                <h2>测试数据集：
+                                    <datasetSelector :datasets=env.problem.datasets @transferDataset="getDataset"></datasetSelector>
+                                </h2>
+                                <div>
+                                    <p>名称：{{env.dataset.name}}</p>
+                                    <p>版本：{{env.dataset.version}}</p>
+                                    <p>描述：{{env.dataset.desc}}</p>
+                                    <p>生成方法：{{env.dataset.gen}}</p>
+                                </div>
+                                <hr>
+                                <br>
+                                <br>
+                                <Button type='warning' @click='genReport'>生成分析报告</Button>
+                            </TabPane>
                         </Tabs>
 
                     </Card>
@@ -74,6 +109,10 @@
 </template>
 <script>
 import amSelector from '../components/amselector'
+import configEditor from '../components/configeditor'
+import runtimeSelector from "../components/runtimeselector"
+import problemSelector from "../components/problemselector"
+import datasetSelector from "../components/datasetselector"
 export default {
     data() {
         return {
@@ -96,8 +135,16 @@ export default {
             },
             paper: {
 
+            },
+            asp_configs: [],
+            asp_subconfigs: [],
+            res_configs: {},
+            res_subconfigs: {},
+            env:{
+                runtime:{},
+                problem:{},
+                dataset:{}
             }
-
         }
     },
     methods: {
@@ -123,14 +170,12 @@ export default {
                 console.log(response);
             });
         },
-        getConfigs(msg) {
-            this.formItem.configs = msg;
-        },
         getAM(msg) {
             var id = this.selected.id;
             this.$set(this.configs[id], 'am', msg);
             var cell = this.graph.getCell(id);
             cell.attr('text/text', msg.name);
+            this.assempleConfigs();
             // this.configs[this.selected.id].am = msg;
             console.log(msg);
         },
@@ -143,13 +188,143 @@ export default {
                 console.log('delete node');
             }
         },
-        getAllAMs(){
+        configs2arr(cfgs) {
+            var res = [];
+            for (var i in cfgs) {
+                res.push({
+                    name: i,
+                    range: cfgs[i].range,
+                    value: cfgs[i].value
+                });
+            }
+            return res;
+        },
+        arr2configs(arr) {
+            var res = {};
+            for (var i in arr) {
+                res[arr[i].name] = {};
+                var tmp = res[arr[i].name];
+                tmp.range = arr[i].range;
+                tmp.value = arr[i].value;
+            }
+            console.log(res);
+            return res;
+
+        },
+        getAllAMs() {
+            var res = [];
             var cells = this.graph.getCells();
-            
+            for (var i in cells) {
+                var cell = cells[i];
+                var cellType = cell.attributes.type;
+                if (cellType == "AM") {
+                    res.push(cell);
+                }
+            }
+            return res;
+        },
+        assempleAMs(){//获取所有AM的信息，允许重复
+            var res =[]
+            var ams = this.getAllAMs();
+            for (var i in ams) {
+                var cell = ams[i];
+                var cellId = cell.id;
+                var id = this.configs[cellId].am._id;
+                var loopn = this.configs[cellId].loopnum;
+                res.push({
+                    amid:id,
+                    loopnum:loopn
+                })
+            }
+            return res;
+        },
+        assempleConfigs() {
+            var ams = this.getAllAMs();
+            var asp_configs = {};
+            var asp_subconfigs = {};
+            for (var i in ams) {
+                var cell = ams[i];
+                var cellId = cell.id;
+                var cellConfigs = this.configs[cellId].am.configs;
+                for (var k in cellConfigs) {
+                    var c = cellConfigs[k];
+                    if (asp_configs[c.name] == undefined && (c.value == undefined || c.value == '')) {
+                        asp_configs[c.name] = {
+                            range: c.range,
+                            value: ''
+                        }
+                    }
+                }
+
+                var cellSubConfigs = this.configs[cellId].am.subconfigs;
+                for (var k in cellSubConfigs) {
+                    var c = cellSubConfigs[k];
+                    if (asp_subconfigs[c.name] == undefined && (c.value == undefined || c.value == '')) {
+                        asp_subconfigs[c.name] = {
+                            range: c.range,
+                            value: ''
+                        }
+                    }
+                }
+            }
+            console.log('asemple configs');
+            console.log(asp_configs);
+            console.log(asp_subconfigs);
+            this.asp_configs = this.configs2arr(asp_configs);
+            this.asp_subconfigs = this.configs2arr(asp_subconfigs);
+        },
+        getConfigs(msg) {
+            console.log("get configs");
+            console.log(msg);
+            this.res_configs = this.arr2configs(msg);
+        },
+
+        getSubConfigs(msg) {
+            console.log("get subconfigs");
+            console.log(msg);
+            this.res_subconfigs = this.arr2configs(msg);
+        },
+        getRuntime(msg) {
+            this.env.runtime = msg;
+            // console.log(msg);
+        },
+        getProblem(msg) {
+            this.env.problem = msg;
+            // console.log(msg);
+        },
+        getDataset(msg) {
+            this.env.dataset = msg;
+            // console.log(msg);
+            // console.log("assemple dataset");
+            // console.log(this.assempleInfo());
+        },
+        genReport(){
+            var info ={};
+            info.configs = this.res_configs;
+            info.subconfigs = this.res_subconfigs;
+            info.env = {
+                runtimeid :this.env.runtime._id,
+                problemid :this.env.problem._id,
+                datasetid :this.env.dataset._id
+            };
+            info.ams = this.assempleAMs();
+            console.log('report');
+            console.log(info);
+            this.$ajax({
+                    method:'post',
+                    url:'/api/genreport',
+                    data:info
+                }).then(function(response){
+                    console.log("this is report response");
+                    console.log(response);
+                    // self.newtest.result = '';
+                    // self.newtest.remark = '';
+                    // self.searchTest();
+                });
         }
     },
     components: {
-        amSelector
+        amSelector, configEditor, runtimeSelector, problemSelector, datasetSelector
     },
     mounted() {
         // console.log('test a');
@@ -165,7 +340,7 @@ export default {
             this.stencilPaper = new joint.dia.Paper({
                 el: $('#stencil'),
                 // width: $('#stencil').width(),
-                width:125,
+                width: 125,
                 height: 400,
                 model: self.stencilGraph,
                 interactive: false,
@@ -303,7 +478,8 @@ export default {
             self.selected = {};//selected的内容不与highlighted绑定在一起
 
             var cellId = highlighted.model.id;
-            self.selected.id = cellId;
+            // self.selected.id = cellId;
+            self.$set(self.selected, 'id', cellId);
             var cell = self.graph.getCell(self.selected.id);
             var cellType = cell.attributes.type;
             self.selected.type = cellType;
@@ -318,7 +494,11 @@ export default {
                     loopnum: 1,
                     name: '',
                     id: '',
-                    subconfigs: []
+                    subconfigs: [],
+                    am: {
+                        configs: [],
+                        subconfigs: []
+                    }
                 });
             }
             // console.log(self.selected);
