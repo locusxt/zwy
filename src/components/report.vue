@@ -19,7 +19,7 @@ export default {
     data() {
         return {
             // canvasId: 'myCanvas',
-            type: 'circle',
+            type: 'ring',
             width: 720,
             height: 400,
             data: [
