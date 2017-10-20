@@ -51,12 +51,14 @@
             },
             createDataset(){
                 console.log(this.formItem);
+                var self = this;
                 this.$ajax({
                     method:'post',
                     url:'/api/createdataset',
                     data:this.formItem
                 }).then(function(response){
                     console.log(response);
+                    self.$Message.info(response.data);
                 });
             },
             getDatasets(msg){

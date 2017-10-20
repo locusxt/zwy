@@ -72,12 +72,14 @@
             },
             createCM(){
                 console.log(this.formItem);
+                var self = this;
                 this.$ajax({
                     method:'post',
                     url:'/api/createCM',
                     data:this.formItem
                 }).then(function(response){
                     console.log(response);
+                    self.$Message.info(response.data);
                 });
             },
             getConfigs(msg){

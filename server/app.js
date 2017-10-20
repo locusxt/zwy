@@ -18,7 +18,8 @@ router.post('/api/createruntime', (req, res)=>{
     if (err) {
         res.send(err);
     } else {
-        res.send('create Runtime successed');
+        // res.send('create Runtime successed');
+        res.send('运行环境创建成功');
     }
   });
   // res.send("success");
@@ -31,7 +32,8 @@ router.post('/api/createCM', (req, res)=>{
     if (err) {
         res.send(err);
     } else {
-        res.send('create CM successed');
+        // res.send('create CM successed');
+        res.send('计算模式创建成功');
     }
   });
 });
@@ -43,7 +45,8 @@ router.post('/api/createAM', (req, res)=>{
     if (err) {
         res.send(err);
     } else {
-        res.send('create AM successed');
+        // res.send('create AM successed');
+        res.send('算法模式创建成功');
     }
   });
 });
@@ -55,7 +58,8 @@ router.post('/api/createdataset', (req, res)=>{
     if (err) {
         res.send(err);
     } else {
-        res.send('create dataset successed');
+        // res.send('create dataset successed');
+        res.send('测试问题创建成功');
     }
   });
 });
@@ -69,7 +73,8 @@ router.post('/api/addcmtest', (req, res)=>{
       res.send(err);
     }
     else 
-      res.send('create CMTest successed');
+      // res.send('create CMTest successed');
+      res.send('测试结果添加成功');
   });
 });
 
@@ -94,7 +99,8 @@ router.post('/api/addamtest', (req, res)=>{
       res.send(err);
     }
     else 
-      res.send('create AMTest successed');
+      // res.send('create AMTest successed');
+      res.send('测试结果添加成功');
   });
 });
 
