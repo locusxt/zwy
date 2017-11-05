@@ -2,7 +2,7 @@
     <Row>
         <i-col span='18' offset='2'>
             <div>
-                <h1 align="center">新建算法模式</h1>
+                <h1 align="center">新建算法</h1>
                 <br />
             </div>
             <!-- <searchbar></searchbar> -->
@@ -84,7 +84,7 @@
                     data:this.formItem
                 }).then(function(response){
                     console.log(response);
-                    self.$Message.info(response);
+                    self.$Message.info(response.data);
                 });
             },
             getConfigs(msg){

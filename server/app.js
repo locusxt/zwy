@@ -46,7 +46,7 @@ router.post('/api/createAM', (req, res)=>{
         res.send(err);
     } else {
         // res.send('create AM successed');
-        res.send('算法模式创建成功');
+        res.send('算法创建成功');
     }
   });
 });

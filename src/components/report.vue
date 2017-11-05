@@ -54,6 +54,7 @@ export default {
                 });
             }
             this.data = res;
+            this.options.title = "总时间：" + total +"s";
         }
     }
 }

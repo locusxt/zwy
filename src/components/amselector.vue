@@ -6,9 +6,9 @@
 
 <template>
     <div class="inline-div">
-        <Button type="primary" @click="selectModal = true">选择算法模式</Button>
+        <Button type="primary" @click="selectModal = true">选择算法</Button>
         <Modal 
-            v-model="selectModal" title="选择算法模式" width="700">
+            v-model="selectModal" title="选择算法" width="700">
             <searchbar></searchbar>
             <br>
             <Table :columns="columns" :data="data"></Table>

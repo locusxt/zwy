@@ -42,7 +42,7 @@
                                         </p>
                                         <Input v-model="configs[selected.id].loopnum"></Input>
                                         <p>
-                                            <strong>算法模式：
+                                            <strong>算法：
                                                 <amSelector @transferAM='getAM'></amSelector>
                                             </strong>
                                         </p>
@@ -93,9 +93,10 @@
                                 <br>
                                 <Button type='warning' @click='genReport'>生成分析报告</Button>
                                 <Modal v-model="reportModal" title="分析报告" width="840">
-                                    <h3>算法模式时间占比(单位:秒)</h3>
+                                    <h3>算法时间(单位:秒)</h3>
                                     <report :chartsData='amReport' canvasId='ca1'></report>
-                                    <h3>计算模式时间占比(单位:秒)</h3>
+                                    <hr>
+                                    <h3>计算模式时间(单位:秒)</h3>
                                     <report :chartsData='cmReport' canvasId='ca2'></report>
                                 </Modal>
                             </TabPane>
@@ -559,7 +560,7 @@ export default {
                 }
             },
             attrs: {
-                '.label': { text: '算法模式', 'ref-x': .5, 'ref-y': .4 },
+                '.label': { text: '算法', 'ref-x': .5, 'ref-y': .4 },
                 rect: { fill: '#2ECC71' }
             }
         });

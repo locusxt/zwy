@@ -10,7 +10,7 @@
         
     <Modal
             v-model="modal1"
-            title="查看算法模式"
+            title="查看算法"
             width="720"
         >
             <p><strong>名称: </strong>{{cur.name}}</p>

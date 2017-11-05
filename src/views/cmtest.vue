@@ -227,6 +227,7 @@ export default {
                 }).then(function(response){
                     console.log("this is response");
                     console.log(response);
+                    self.$Message.info(response.data);
                     self.newtest.result = '';
                     self.newtest.remark = '';
                     self.searchTest();

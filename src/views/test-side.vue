@@ -15,7 +15,7 @@
                     测试
                 </template>
                 <Menu-item name="2-1">计算模式</Menu-item>
-                <Menu-item name="2-2">算法模式</Menu-item>
+                <Menu-item name="2-2">算法</Menu-item>
             </Submenu>
         </Menu>
     </div>

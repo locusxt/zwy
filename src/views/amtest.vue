@@ -2,12 +2,12 @@
     <Row>
         <i-col span='18' offset='2'>
             <div>
-                <h1 align="center">测试算法模式</h1>
+                <h1 align="center">测试算法</h1>
                 <br />
             </div>
         </i-col>
         <i-col span='18' offset='2'>
-            <h2>算法模式：&nbsp;&nbsp;&nbsp;
+            <h2>算法：&nbsp;&nbsp;&nbsp;
                 <amSelector @transferAM="getAM"></amSelector>
             </h2>
             <div>
@@ -284,6 +284,7 @@ export default {
                 }).then(function(response){
                     console.log("this is response");
                     console.log(response);
+                    self.$Message.info(response.data);
                     self.newtest.result = '';
                     self.newtest.remark = '';
                     self.searchTest();

@@ -10,7 +10,7 @@
             </Submenu>
             <Submenu name="2">
                 <template slot="title">
-                    算法模式
+                    算法
                 </template>
                 <Menu-item name="2-1">浏览</Menu-item>
                 <Menu-item name="2-2">新建</Menu-item>
